@@ -15,7 +15,7 @@
 {
     HawkAuthAttributes *attributes = [[HawkAuthAttributes alloc] init];
 
-    NSArray *parts = [[header substringFromIndex:(int)[header firstIndexOf:@"id"]] componentsSeparatedByString:@", "];
+    NSArray *parts = [[header substringFromIndex:(int)[header firstIndexOf:@"Hawk "] + 5] componentsSeparatedByString:@", "];
 
     NSString *partKey;
     NSString *partValue;
