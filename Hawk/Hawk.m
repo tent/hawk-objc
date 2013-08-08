@@ -196,6 +196,46 @@
     return [HawkResponse hawkResponseWithCredentials:credentials];
 }
 
++ (HawkResponse *)validateBewit:(NSString *)bewit hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes serverTimestamp:(NSDate *)serverTimestamp credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup
+{
+    NSString *padding = [[[NSString alloc] init] stringByPaddingToLength:((4 - bewit.length) % 4) withString:@"=" startingAtIndex:0];
+
+    NSString *normalizedString = [[bewit stringByAppendingString:padding] base64DecodedString];
+
+    NSArray *parts = [normalizedString componentsSeparatedByString:@"\\"];
+
+    if (parts.count != 4) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorMalformedBewit];
+    }
+
+    NSString *hawkId = [parts objectAtIndex:0];
+    HawkCredentials *credentials = credentialsLookup(hawkId);
+
+    if (!credentials) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorUnknownId];
+    }
+
+    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
+    [authAttributes mergeHawkAuthAttributes:hawkAuthAttributes];
+    authAttributes.credentials = credentials;
+    authAttributes.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[[[NSNumberFormatter alloc] numberFromString:[parts objectAtIndex:1]] doubleValue]];
+    authAttributes.mac = [parts objectAtIndex:2];
+    authAttributes.ext = [parts objectAtIndex:3];
+    authAttributes.hawkType = @"bewit";
+
+    if ([authAttributes.timestamp timeIntervalSince1970] > [serverTimestamp timeIntervalSince1970]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorBewitExpired];
+    }
+
+    NSString *expectedMac = [Hawk mac:authAttributes];
+
+    if (![expectedMac isEqualToString:authAttributes.mac]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
+    }
+
+    return [HawkResponse hawkResponseWithCredentials:credentials];
+}
+
 + (HawkResponse *)validateServerAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
 {
     HawkAuthAttributes *authAttributes = [HawkAuthAttributes hawkAuthAttributesFromAuthorizationHeader:header];

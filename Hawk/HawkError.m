@@ -58,6 +58,10 @@
         case HawkErrorUnknownId:
             message = @"unknown id";
             break;
+
+        case HawkErrorMalformedBewit:
+            message = @"bewit is malformed";
+            break;
     }
 
     return message;

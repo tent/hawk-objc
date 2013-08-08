@@ -15,7 +15,8 @@ typedef NS_ENUM(NSUInteger, HawkErrorReason) {
     HawkErrorBewitExpired,
     HawkErrorTimestampSkew,
     HawkErrorInvalidBewitMethod,
-    HawkErrorUnknownId
+    HawkErrorUnknownId,
+    HawkErrorMalformedBewit
 };
 
 @interface HawkError : NSObject

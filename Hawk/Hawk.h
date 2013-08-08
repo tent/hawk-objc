@@ -31,6 +31,11 @@
                             credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
                                   nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
 
++ (HawkResponse *)validateBewit:(NSString *)bewit
+             hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
+                serverTimestamp:(NSDate *)serverTimestamp
+              credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup;
+
 + (HawkResponse *)validateServerAuthorizationHeader:(NSString *)header
                                  hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes;
 
