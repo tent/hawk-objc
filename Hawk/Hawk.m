@@ -36,8 +36,12 @@
 {
     NSMutableData *normalizedString = [[NSMutableData alloc] init];
 
+    if (!attributes.hawkType) {
+        attributes.hawkType = @"header";
+    }
+
     // header
-    [normalizedString appendData:[@"hawk.1.header\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendData:[[NSString stringWithFormat:@"hawk.1.%@\n", attributes.hawkType] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // timestamp
     [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -62,7 +66,9 @@
     [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // hash
-    [normalizedString appendData:[[self payloadHashWithAttributes:attributes] dataUsingEncoding:NSUTF8StringEncoding]];
+    if (attributes.payload) {
+        [normalizedString appendData:[[self payloadHashWithAttributes:attributes] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
     [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
     // ext
@@ -74,8 +80,8 @@
     // app
     if (attributes.app) {
         [normalizedString appendData:[attributes.app dataUsingEncoding:NSUTF8StringEncoding]];
-        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
     }
+    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
     // trailing newline
     [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
@@ -88,6 +94,12 @@
     NSData *output = [NSData dataWithBytes:hmac length:CC_SHA256_DIGEST_LENGTH];
 
     return [output base64EncodedString];
+}
+
++ (NSString *)responseMac:(HawkAuthAttributes *)attributes
+{
+    attributes.hawkType = @"response";
+    return [Hawk mac:attributes];
 }
 
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes

@@ -23,6 +23,8 @@
 @property (copy) NSNumber *port;
 @property (copy) NSData *payload;
 
+@property (copy) NSString *hawkType;
+
 @property (copy) NSString *payloadHash;
 @property (copy) NSString *mac;
 

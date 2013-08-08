@@ -61,6 +61,20 @@
     XCTAssertEqualObjects(mac, expectedMac);
 }
 
+- (void)testServerAuthorizationMac
+{
+    NSString *expectedMac = @"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=";
+
+    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    authAttributes.nonce = @"3yuYCD4Z";
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    authAttributes.payload = nil;
+
+    NSString *mac = [Hawk responseMac:authAttributes];
+
+    XCTAssertEqualObjects(mac, expectedMac);
+}
+
 - (void)testAuthorizationHeader
 {
     NSString *expectedHeader = @"Authorization: Hawk id=\"exqbZWtykFZIh2D7cXi9dA\", mac=\"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=\", ts=\"1368996800\", nonce=\"3yuYCD4Z\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\", app=\"wn6yzHGe5TLaT-fvOPbAyQ\"";
