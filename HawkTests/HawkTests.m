@@ -144,4 +144,32 @@
     XCTAssertEqualObjects(header, expectedHeader);
 }
 
+- (void)testServerAuthorizationHeaderValidation
+{
+    NSString *header = @"Server-Authorization: Hawk mac=\"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=\"";
+
+    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    authAttributes.nonce = @"3yuYCD4Z";
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    authAttributes.payload = nil;
+
+    HawkResponse *response = [Hawk validateServerAuthorizationHeader:header hawkAuthAttributes:authAttributes];
+
+    XCTAssert(!response.error);
+    XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
+}
+
+- (void)testServerAuthorizationHeaderWithPayloadValidation
+{
+    NSString *header = @"Server-Authorization: Hawk mac=\"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\"";
+
+    authAttributes.nonce = @"3yuYCD4Z";
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+
+    HawkResponse *response = [Hawk validateServerAuthorizationHeader:header hawkAuthAttributes:authAttributes];
+
+    XCTAssert(!response.error);
+    XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
+}
+
 @end

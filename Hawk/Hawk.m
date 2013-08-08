@@ -168,4 +168,26 @@
     return [HawkResponse hawkResponseWithCredentials:credentials];
 }
 
++ (HawkResponse *)validateServerAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
+{
+    HawkAuthAttributes *authAttributes = [HawkAuthAttributes hawkAuthAttributesFromAuthorizationHeader:header];
+    [authAttributes mergeHawkAuthAttributes:hawkAuthAttributes];
+
+    NSString *expectedMac = [Hawk responseMac:hawkAuthAttributes];
+
+    if (authAttributes.payloadHash) {
+        NSString *expectedPayloadHash = [Hawk payloadHashWithAttributes:hawkAuthAttributes];
+
+        if (![expectedPayloadHash isEqualToString:authAttributes.payloadHash]) {
+            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash];
+        }
+    }
+
+    if (![expectedMac isEqualToString:authAttributes.mac]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
+    }
+
+    return [HawkResponse hawkResponseWithCredentials:authAttributes.credentials];
+}
+
 @end

@@ -30,4 +30,7 @@
                             credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
                                   nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
 
++ (HawkResponse *)validateServerAuthorizationHeader:(NSString *)header
+                                 hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes;
+
 @end
