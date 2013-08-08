@@ -89,6 +89,7 @@
 
 - (void)testBewit
 {
+    // First Test Vector (doesn't ensure urlsafe base64 fn used)
     NSString *expectedBewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
     authAttributes.payload = nil;
@@ -96,6 +97,23 @@
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
     NSString *bewit = [Hawk bewit:authAttributes];
+
+    XCTAssertEqualObjects(bewit, expectedBewit);
+
+    // Second Test Vector (doesn't ensure urlsafe base64 fn used, ensures far future timestamps work)
+    expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
+
+    authAttributes = [[HawkAuthAttributes alloc] init];
+    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:@"sha256"];
+
+    authAttributes.method = @"GET";
+    authAttributes.requestUri = @"/resource/4?a=1&b=2";
+    authAttributes.port = [NSNumber numberWithInt:80];
+    authAttributes.host = @"example.com";
+    authAttributes.ext = @"some-app-data";
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
+
+    bewit = [Hawk bewit:authAttributes];
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 }

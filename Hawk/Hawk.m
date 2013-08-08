@@ -45,7 +45,7 @@
     [normalizedString appendData:[[NSString stringWithFormat:@"hawk.1.%@\n", attributes.hawkType] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // timestamp
-    [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendData:[[NSString stringWithFormat:@"%li\n", (long int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     if (![attributes.hawkType isEqualToString:@"ts"]) {
         // nonce
@@ -67,7 +67,7 @@
         [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
         // port
-        [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[[NSString stringWithFormat:@"%li\n", (long int)[attributes.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
 
         // hash
         if (attributes.payload) {
@@ -126,7 +126,7 @@
 
     NSString *mac = [Hawk mac:authAttributes];
 
-    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%i\\%@\\%@", authAttributes.credentials.hawkId, (int)[authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%li\\%@\\%@", authAttributes.credentials.hawkId, (long int)[authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
 
     NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
 
@@ -149,7 +149,7 @@
 
     [header appendData:[[NSString stringWithFormat:@", mac=\"%@\"", [self mac:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
 
-    [header appendData:[[NSString stringWithFormat:@", ts=\"%i\"", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendData:[[NSString stringWithFormat:@", ts=\"%li\"", (long int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     [header appendData:[[NSString stringWithFormat:@", nonce=\"%@\"", attributes.nonce] dataUsingEncoding:NSUTF8StringEncoding]];
 
@@ -178,7 +178,7 @@
 + (NSString *)timestampSkewHeader:(HawkAuthAttributes *)attributes
 {
     NSString *tsm = [Hawk timestampSkewMac:attributes];
-    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%i\", tsm=\"%@\", error=\"timestamp skew too high\"", (int)[attributes.timestamp timeIntervalSince1970], tsm];
+    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%li\", tsm=\"%@\", error=\"timestamp skew too high\"", (long int)[attributes.timestamp timeIntervalSince1970], tsm];
 
     return header;
 }
