@@ -19,5 +19,6 @@
 @interface Hawk : NSObject
 
 + (NSString *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes;
++ (NSString *)mac:(HawkAuthAttributes *)attributes;
 
 @end

@@ -13,6 +13,7 @@
 
 @property (nonatomic) HawkCredentials *credentials;
 @property (copy) NSString *app;
+@property (copy) NSString *ext;
 @property (copy) NSString *nonce;
 @property (copy) NSDate *timestamp;
 @property (copy) NSString *contentType;

@@ -25,9 +25,6 @@
 
     authAttributes = [[HawkAuthAttributes alloc] init];
     authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:@"sha256"];
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
     authAttributes.contentType = @"application/vnd.tent.post.v0+json";
     authAttributes.method = @"POST";
     authAttributes.requestUri = @"/posts";
@@ -48,7 +45,20 @@
 
     NSString *payloadHash = [Hawk payloadHashWithAttributes:authAttributes];
 
-    XCTAssertEqualObjects(expectedHash, payloadHash);
+    XCTAssertEqualObjects(payloadHash, expectedHash);
+}
+
+- (void)testMac
+{
+    NSString *expectedMac = @"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=";
+
+    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    authAttributes.nonce = @"3yuYCD4Z";
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+
+    NSString *mac = [Hawk mac:authAttributes];
+
+    XCTAssertEqualObjects(mac, expectedMac);
 }
 
 @end
