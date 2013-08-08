@@ -23,4 +23,11 @@
 @property (copy) NSNumber *port;
 @property (copy) NSData *payload;
 
+@property (copy) NSString *payloadHash;
+@property (copy) NSString *mac;
+
++ (HawkAuthAttributes *)hawkAuthAttributesFromAuthorizationHeader:(NSString *)header;
+
+- (void)mergeHawkAuthAttributes:(HawkAuthAttributes *)otherAttributes;
+
 @end

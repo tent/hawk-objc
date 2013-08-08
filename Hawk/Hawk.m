@@ -7,6 +7,7 @@
 //
 
 #import "Hawk.h"
+#import "NSString+Parser.h"
 
 @implementation Hawk
 
@@ -110,6 +111,38 @@
     }
 
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
+}
+
++ (BOOL)validateAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup nonceLookup:(BOOL (^)(NSString *))nonceLookup
+{
+    NSUInteger *splitIndex = [header firstIndexOf:@","];
+    NSString *hawkId = [[header substringToIndex:(int)splitIndex - 1] substringFromIndex:(int)[header firstIndexOf:@"id"] + 4];
+
+    HawkCredentials *credentials = credentialsLookup(hawkId);
+
+    if (!credentials) {
+        // unknown hawk id
+        return NO;
+    }
+
+    HawkAuthAttributes *authAttributes = [HawkAuthAttributes hawkAuthAttributesFromAuthorizationHeader:header];
+    [authAttributes mergeHawkAuthAttributes:hawkAuthAttributes];
+    authAttributes.credentials = credentials;
+
+    if (authAttributes.payloadHash) {
+        NSString *expectedPayloadHash = [Hawk payloadHashWithAttributes:authAttributes];
+        if (![expectedPayloadHash isEqualToString:authAttributes.payloadHash]) {
+            return NO; // invalid payload hash
+        }
+    }
+
+    NSString *expectedMac = [Hawk mac:authAttributes];
+
+    if (![expectedMac isEqualToString:authAttributes.mac]) {
+        return NO; // invalid mac
+    }
+
+    return YES;
 }
 
 @end

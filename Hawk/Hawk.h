@@ -21,5 +21,9 @@
 + (NSString *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes;
 + (NSString *)mac:(HawkAuthAttributes *)attributes;
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
++ (BOOL)validateAuthorizationHeader:(NSString *)header
+                 hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
+                  credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
+                        nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
 
 @end
