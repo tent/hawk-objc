@@ -15,6 +15,8 @@
 #import "NSData+Base64.h"
 
 #import "HawkAuthAttributes.h"
+#import "HawkResponse.h"
+#import "HawkError.h"
 
 @interface Hawk : NSObject
 
@@ -23,9 +25,9 @@
 + (NSString *)responseMac:(HawkAuthAttributes *)attributes;
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
 + (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes;
-+ (BOOL)validateAuthorizationHeader:(NSString *)header
-                 hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
-                  credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
-                        nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
++ (HawkResponse *)validateAuthorizationHeader:(NSString *)header
+                           hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
+                            credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
+                                  nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
 
 @end

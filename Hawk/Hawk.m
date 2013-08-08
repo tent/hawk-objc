@@ -137,7 +137,7 @@
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
 }
 
-+ (BOOL)validateAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup nonceLookup:(BOOL (^)(NSString *))nonceLookup
++ (HawkResponse *)validateAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup nonceLookup:(BOOL (^)(NSString *))nonceLookup
 {
     NSUInteger *splitIndex = [header firstIndexOf:@","];
     NSString *hawkId = [[header substringToIndex:(int)splitIndex - 1] substringFromIndex:(int)[header firstIndexOf:@"id"] + 4];
@@ -145,8 +145,7 @@
     HawkCredentials *credentials = credentialsLookup(hawkId);
 
     if (!credentials) {
-        // unknown hawk id
-        return NO;
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorUnknownId];
     }
 
     HawkAuthAttributes *authAttributes = [HawkAuthAttributes hawkAuthAttributesFromAuthorizationHeader:header];
@@ -156,17 +155,17 @@
     if (authAttributes.payloadHash) {
         NSString *expectedPayloadHash = [Hawk payloadHashWithAttributes:authAttributes];
         if (![expectedPayloadHash isEqualToString:authAttributes.payloadHash]) {
-            return NO; // invalid payload hash
+            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash];
         }
     }
 
     NSString *expectedMac = [Hawk mac:authAttributes];
 
     if (![expectedMac isEqualToString:authAttributes.mac]) {
-        return NO; // invalid mac
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
     }
 
-    return YES;
+    return [HawkResponse hawkResponseWithCredentials:credentials];
 }
 
 @end
