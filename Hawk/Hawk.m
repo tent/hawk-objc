@@ -79,12 +79,13 @@
 
     // app
     if (attributes.app) {
-        [normalizedString appendData:[attributes.app dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        if (!attributes.dig) {
+            attributes.dig = @"";
+        }
 
-    // trailing newline
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.app] dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.dig] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
 
     const char *key = [attributes.credentials.key cStringUsingEncoding:NSUTF8StringEncoding];
     unsigned char hmac[CC_SHA256_DIGEST_LENGTH];
