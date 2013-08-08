@@ -89,4 +89,27 @@
     return [output base64EncodedString];
 }
 
++ (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes
+{
+    NSMutableData *header = [[NSMutableData alloc] init];
+
+    [header appendData:[[NSString stringWithFormat:@"Authorization: Hawk id=\"%@\"", attributes.credentials.hawkId] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    [header appendData:[[NSString stringWithFormat:@", mac=\"%@\"", [self mac:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    [header appendData:[[NSString stringWithFormat:@", ts=\"%i\"", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    [header appendData:[[NSString stringWithFormat:@", nonce=\"%@\"", attributes.nonce] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    if (attributes.payload) {
+        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHashWithAttributes:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    if (attributes.app) {
+        [header appendData:[[NSString stringWithFormat:@", app=\"%@\"", attributes.app] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
+}
+
 @end
