@@ -47,47 +47,49 @@
     // timestamp
     [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
-    // nonce
-    if (attributes.nonce) {
-        [normalizedString appendData:[attributes.nonce dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // method
-    [normalizedString appendData:[attributes.method dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // request uri
-    [normalizedString appendData:[attributes.requestUri dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // host
-    [normalizedString appendData:[attributes.host dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // port
-    [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // hash
-    if (attributes.payload) {
-        [normalizedString appendData:[[self payloadHashWithAttributes:attributes] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // ext
-    if (attributes.ext) {
-        [normalizedString appendData:[attributes.ext dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // app
-    if (attributes.app) {
-        if (!attributes.dig) {
-            attributes.dig = @"";
+    if (![attributes.hawkType isEqualToString:@"ts"]) {
+        // nonce
+        if (attributes.nonce) {
+            [normalizedString appendData:[attributes.nonce dataUsingEncoding:NSUTF8StringEncoding]];
         }
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
-        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.app] dataUsingEncoding:NSUTF8StringEncoding]];
-        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.dig] dataUsingEncoding:NSUTF8StringEncoding]];
+        // method
+        [normalizedString appendData:[attributes.method dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // request uri
+        [normalizedString appendData:[attributes.requestUri dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // host
+        [normalizedString appendData:[attributes.host dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // port
+        [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // hash
+        if (attributes.payload) {
+            [normalizedString appendData:[[self payloadHashWithAttributes:attributes] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // ext
+        if (attributes.ext) {
+            [normalizedString appendData:[attributes.ext dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        // app
+        if (attributes.app) {
+            if (!attributes.dig) {
+                attributes.dig = @"";
+            }
+
+            [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.app] dataUsingEncoding:NSUTF8StringEncoding]];
+            [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", attributes.dig] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
     }
 
     const char *key = [attributes.credentials.key cStringUsingEncoding:NSUTF8StringEncoding];
@@ -129,6 +131,14 @@
     NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
 
     return bewit;
+}
+
++ (NSString *)timestampSkewMac:(HawkAuthAttributes *)attributes
+{
+    attributes.hawkType = @"ts";
+    NSString *tsm = [Hawk mac:attributes];
+
+    return tsm;
 }
 
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes

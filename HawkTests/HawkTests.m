@@ -223,4 +223,18 @@
     XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
 }
 
+- (void)testTimestampSkew
+{
+    NSString *expectedTsm = @"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=";
+
+    HawkCredentials *credentials = authAttributes.credentials;
+    authAttributes = [[HawkAuthAttributes alloc] init];
+    authAttributes.credentials = credentials;
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+
+    NSString *tsm = [Hawk timestampSkewMac:authAttributes];
+
+    XCTAssertEqualObjects(expectedTsm, tsm);
+}
+
 @end

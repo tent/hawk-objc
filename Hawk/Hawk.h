@@ -24,6 +24,7 @@
 + (NSString *)mac:(HawkAuthAttributes *)attributes;
 + (NSString *)responseMac:(HawkAuthAttributes *)attributes;
 + (NSString *)bewit:(HawkAuthAttributes *)attributes;
++ (NSString *)timestampSkewMac:(HawkAuthAttributes *)attributes;
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
 + (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes;
 + (HawkResponse *)validateAuthorizationHeader:(NSString *)header
