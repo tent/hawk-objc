@@ -175,6 +175,14 @@
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
 }
 
++ (NSString *)timestampSkewHeader:(HawkAuthAttributes *)attributes
+{
+    NSString *tsm = [Hawk timestampSkewMac:attributes];
+    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%i\", tsm=\"%@\", error=\"timestamp skew too high\"", (int)[attributes.timestamp timeIntervalSince1970], tsm];
+
+    return header;
+}
+
 + (HawkResponse *)validateAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup nonceLookup:(BOOL (^)(NSString *))nonceLookup
 {
     NSUInteger *splitIndex = [header firstIndexOf:@","];

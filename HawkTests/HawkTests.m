@@ -237,4 +237,18 @@
     XCTAssertEqualObjects(expectedTsm, tsm);
 }
 
+- (void)testTimestampSkewHeader
+{
+    NSString *expectedHeader = @"WWW-Authenticate: Hawk ts=\"1368996800\", tsm=\"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=\", error=\"timestamp skew too high\"";
+
+    HawkCredentials *credentials = authAttributes.credentials;
+    authAttributes = [[HawkAuthAttributes alloc] init];
+    authAttributes.credentials = credentials;
+    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+
+    NSString *header = [Hawk timestampSkewHeader:authAttributes];
+
+    XCTAssertEqualObjects(expectedHeader, header);
+}
+
 @end
