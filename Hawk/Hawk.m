@@ -126,6 +126,17 @@
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
 }
 
++ (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes
+{
+    NSMutableData *header = [[NSMutableData alloc] initWithData:[[NSString stringWithFormat:@"Server-Authorization: Hawk mac=\"%@\"", [Hawk responseMac:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    if (attributes.payload) {
+        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [Hawk payloadHashWithAttributes:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
+}
+
 + (BOOL)validateAuthorizationHeader:(NSString *)header hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes credentialsLookup:(HawkCredentials *(^)(NSString *))credentialsLookup nonceLookup:(BOOL (^)(NSString *))nonceLookup
 {
     NSUInteger *splitIndex = [header firstIndexOf:@","];

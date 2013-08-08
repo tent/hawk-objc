@@ -22,6 +22,7 @@
 + (NSString *)mac:(HawkAuthAttributes *)attributes;
 + (NSString *)responseMac:(HawkAuthAttributes *)attributes;
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
++ (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes;
 + (BOOL)validateAuthorizationHeader:(NSString *)header
                  hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
                   credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
