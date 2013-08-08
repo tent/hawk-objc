@@ -8,6 +8,7 @@
 
 #import "Hawk.h"
 #import "NSString+Parser.h"
+#import "NSString+Base64.h"
 
 @implementation Hawk
 
@@ -47,7 +48,9 @@
     [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", (int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // nonce
-    [normalizedString appendData:[attributes.nonce dataUsingEncoding:NSUTF8StringEncoding]];
+    if (attributes.nonce) {
+        [normalizedString appendData:[attributes.nonce dataUsingEncoding:NSUTF8StringEncoding]];
+    }
     [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
     // method
@@ -101,6 +104,31 @@
 {
     attributes.hawkType = @"response";
     return [Hawk mac:attributes];
+}
+
++ (NSString *)bewit:(HawkAuthAttributes *)attributes
+{
+    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
+    authAttributes.hawkType = @"bewit";
+    authAttributes.credentials = attributes.credentials;
+    authAttributes.timestamp = attributes.timestamp;
+    authAttributes.method = attributes.method;
+    authAttributes.host = attributes.host;
+    authAttributes.port = attributes.port;
+    authAttributes.requestUri = attributes.requestUri;
+    authAttributes.ext = attributes.ext;
+
+    if (!authAttributes.ext) {
+        authAttributes.ext = @"";
+    }
+
+    NSString *mac = [Hawk mac:authAttributes];
+
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%i\\%@\\%@", authAttributes.credentials.hawkId, (int)[authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
+
+    NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
+
+    return bewit;
 }
 
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes

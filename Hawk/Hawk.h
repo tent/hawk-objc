@@ -23,6 +23,7 @@
 + (NSString *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes;
 + (NSString *)mac:(HawkAuthAttributes *)attributes;
 + (NSString *)responseMac:(HawkAuthAttributes *)attributes;
++ (NSString *)bewit:(HawkAuthAttributes *)attributes;
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
 + (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes;
 + (HawkResponse *)validateAuthorizationHeader:(NSString *)header
