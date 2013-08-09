@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88417BE917B59C4B0096F45F /* libHawk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C92417B2DF6F0056A6F9 /* libHawk.a */; };
 		8857C8E117B2DDD40056A6F9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8E017B2DDD40056A6F9 /* Cocoa.framework */; };
 		8857C8EB17B2DDD40056A6F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8857C8E917B2DDD40056A6F9 /* InfoPlist.strings */; };
 		8857C8F617B2DDD40056A6F9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8F517B2DDD40056A6F9 /* XCTest.framework */; };
@@ -23,7 +24,6 @@
 		8857C93617B2DF700056A6F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C93517B2DF700056A6F9 /* UIKit.framework */; };
 		8857C93F17B2DF700056A6F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8857C93D17B2DF700056A6F9 /* InfoPlist.strings */; };
 		8857C95217B2DFE00056A6F9 /* HawkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90117B2DDD40056A6F9 /* HawkTests.m */; };
-		8857C96617B2E2FB0056A6F9 /* libHawk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C92417B2DF6F0056A6F9 /* libHawk.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		8857C96817B2E31D0056A6F9 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90D17B2DE4F0056A6F9 /* NSData+Base64.m */; };
 		8857C96A17B2E31D0056A6F9 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90F17B2DE4F0056A6F9 /* NSString+Base64.m */; };
 		8857C97017B2E3230056A6F9 /* HawkCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C91917B2DE9F0056A6F9 /* HawkCredentials.m */; };
@@ -62,7 +62,7 @@
 			containerPortal = 8857C8D417B2DDD40056A6F9 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8857C92317B2DF6F0056A6F9;
-			remoteInfo = libHawk;
+			remoteInfo = libhawk;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -103,11 +103,11 @@
 		8857C91917B2DE9F0056A6F9 /* HawkCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HawkCredentials.m; sourceTree = "<group>"; };
 		8857C92417B2DF6F0056A6F9 /* libHawk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHawk.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8857C92517B2DF6F0056A6F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		8857C92917B2DF700056A6F9 /* libHawk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libHawk-Prefix.pch"; sourceTree = "<group>"; };
-		8857C92A17B2DF700056A6F9 /* libHawk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libHawk.h; sourceTree = "<group>"; };
-		8857C93217B2DF700056A6F9 /* libHawkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libHawkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8857C92917B2DF700056A6F9 /* libhawk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libhawk-Prefix.pch"; sourceTree = "<group>"; };
+		8857C92A17B2DF700056A6F9 /* libhawk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libhawk.h; sourceTree = "<group>"; };
+		8857C93217B2DF700056A6F9 /* libhawkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libhawkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8857C93517B2DF700056A6F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		8857C93C17B2DF700056A6F9 /* libHawkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libHawkTests-Info.plist"; sourceTree = "<group>"; };
+		8857C93C17B2DF700056A6F9 /* libhawkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libhawkTests-Info.plist"; sourceTree = "<group>"; };
 		8857C93E17B2DF700056A6F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8857C99417B2FCFC0056A6F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		885DE67417B411A20066BD9B /* HawkError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HawkError.h; sourceTree = "<group>"; };
@@ -152,9 +152,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88417BE917B59C4B0096F45F /* libHawk.a in Frameworks */,
 				8857C9C917B3010C0056A6F9 /* XCTest.framework in Frameworks */,
 				8857C99517B2FCFC0056A6F9 /* Foundation.framework in Frameworks */,
-				8857C96617B2E2FB0056A6F9 /* libHawk.a in Frameworks */,
 				8857C93617B2DF700056A6F9 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,8 +167,8 @@
 			children = (
 				8857C8E617B2DDD40056A6F9 /* Hawk */,
 				8857C8FB17B2DDD40056A6F9 /* HawkTests */,
-				8857C92717B2DF700056A6F9 /* libHawk */,
-				8857C93A17B2DF700056A6F9 /* libHawkTests */,
+				8857C92717B2DF700056A6F9 /* libhawk */,
+				8857C93A17B2DF700056A6F9 /* libhawkTests */,
 				8857C8DF17B2DDD40056A6F9 /* Frameworks */,
 				8857C8DE17B2DDD40056A6F9 /* Products */,
 			);
@@ -180,7 +180,7 @@
 				8857C8DD17B2DDD40056A6F9 /* Hawk.framework */,
 				8857C8F417B2DDD40056A6F9 /* HawkTests.xctest */,
 				8857C92417B2DF6F0056A6F9 /* libHawk.a */,
-				8857C93217B2DF700056A6F9 /* libHawkTests.xctest */,
+				8857C93217B2DF700056A6F9 /* libhawkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -267,35 +267,35 @@
 			path = Base64;
 			sourceTree = "<group>";
 		};
-		8857C92717B2DF700056A6F9 /* libHawk */ = {
+		8857C92717B2DF700056A6F9 /* libhawk */ = {
 			isa = PBXGroup;
 			children = (
-				8857C92A17B2DF700056A6F9 /* libHawk.h */,
+				8857C92A17B2DF700056A6F9 /* libhawk.h */,
 				8857C92817B2DF700056A6F9 /* Supporting Files */,
 			);
-			path = libHawk;
+			path = libhawk;
 			sourceTree = "<group>";
 		};
 		8857C92817B2DF700056A6F9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8857C92917B2DF700056A6F9 /* libHawk-Prefix.pch */,
+				8857C92917B2DF700056A6F9 /* libhawk-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8857C93A17B2DF700056A6F9 /* libHawkTests */ = {
+		8857C93A17B2DF700056A6F9 /* libhawkTests */ = {
 			isa = PBXGroup;
 			children = (
 				8857C93B17B2DF700056A6F9 /* Supporting Files */,
 			);
-			path = libHawkTests;
+			path = libhawkTests;
 			sourceTree = "<group>";
 		};
 		8857C93B17B2DF700056A6F9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8857C93C17B2DF700056A6F9 /* libHawkTests-Info.plist */,
+				8857C93C17B2DF700056A6F9 /* libhawkTests-Info.plist */,
 				8857C93D17B2DF700056A6F9 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -357,9 +357,9 @@
 			productReference = 8857C8F417B2DDD40056A6F9 /* HawkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8857C92317B2DF6F0056A6F9 /* libHawk */ = {
+		8857C92317B2DF6F0056A6F9 /* libhawk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8857C94217B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libHawk" */;
+			buildConfigurationList = 8857C94217B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libhawk" */;
 			buildPhases = (
 				8857C92017B2DF6F0056A6F9 /* Sources */,
 				8857C92117B2DF6F0056A6F9 /* Frameworks */,
@@ -369,14 +369,14 @@
 			);
 			dependencies = (
 			);
-			name = libHawk;
-			productName = libHawk;
+			name = libhawk;
+			productName = libhawk;
 			productReference = 8857C92417B2DF6F0056A6F9 /* libHawk.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		8857C93117B2DF700056A6F9 /* libHawkTests */ = {
+		8857C93117B2DF700056A6F9 /* libhawkTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8857C94517B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libHawkTests" */;
+			buildConfigurationList = 8857C94517B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libhawkTests" */;
 			buildPhases = (
 				8857C92E17B2DF700056A6F9 /* Sources */,
 				8857C92F17B2DF700056A6F9 /* Frameworks */,
@@ -387,9 +387,9 @@
 			dependencies = (
 				8857C96517B2E2F60056A6F9 /* PBXTargetDependency */,
 			);
-			name = libHawkTests;
-			productName = libHawkTests;
-			productReference = 8857C93217B2DF700056A6F9 /* libHawkTests.xctest */;
+			name = libhawkTests;
+			productName = libhawkTests;
+			productReference = 8857C93217B2DF700056A6F9 /* libhawkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -423,8 +423,8 @@
 			targets = (
 				8857C8DC17B2DDD40056A6F9 /* Hawk */,
 				8857C8F317B2DDD40056A6F9 /* HawkTests */,
-				8857C92317B2DF6F0056A6F9 /* libHawk */,
-				8857C93117B2DF700056A6F9 /* libHawkTests */,
+				8857C92317B2DF6F0056A6F9 /* libhawk */,
+				8857C93117B2DF700056A6F9 /* libhawkTests */,
 			);
 		};
 /* End PBXProject section */
@@ -513,7 +513,7 @@
 		};
 		8857C96517B2E2F60056A6F9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8857C92317B2DF6F0056A6F9 /* libHawk */;
+			target = 8857C92317B2DF6F0056A6F9 /* libhawk */;
 			targetProxy = 8857C96417B2E2F60056A6F9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -689,9 +689,9 @@
 		8857C94317B2DF700056A6F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/libHawk.dst;
+				DSTROOT = /tmp/libhawk.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libHawk/libHawk-Prefix.pch";
+				GCC_PREFIX_HEADER = "libhawk/libhawk-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -712,9 +712,9 @@
 		8857C94417B2DF700056A6F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/libHawk.dst;
+				DSTROOT = /tmp/libhawk.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libHawk/libHawk-Prefix.pch";
+				GCC_PREFIX_HEADER = "libhawk/libhawk-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -738,12 +738,12 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libHawk/libHawk-Prefix.pch";
+				GCC_PREFIX_HEADER = "libhawk/libhawk-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "libHawkTests/libHawkTests-Info.plist";
+				INFOPLIST_FILE = "libhawkTests/libhawkTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -765,8 +765,8 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libHawk/libHawk-Prefix.pch";
-				INFOPLIST_FILE = "libHawkTests/libHawkTests-Info.plist";
+				GCC_PREFIX_HEADER = "libhawk/libhawk-Prefix.pch";
+				INFOPLIST_FILE = "libhawkTests/libhawkTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -810,7 +810,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8857C94217B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libHawk" */ = {
+		8857C94217B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libhawk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8857C94317B2DF700056A6F9 /* Debug */,
@@ -819,7 +819,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8857C94517B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libHawkTests" */ = {
+		8857C94517B2DF700056A6F9 /* Build configuration list for PBXNativeTarget "libhawkTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8857C94617B2DF700056A6F9 /* Debug */,
