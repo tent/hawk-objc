@@ -26,4 +26,12 @@
     return response;
 }
 
++ (HawkResponse *)hawkResponseWithErrorReason:(HawkErrorReason)reason inputData:(NSData *)inputData
+{
+    HawkResponse *response = [[HawkResponse alloc] init];
+    response.error = [HawkError hawkErrorWithReason:reason normalizedString:[[NSString alloc] initWithData:inputData encoding:NSUTF8StringEncoding]];
+
+    return response;
+}
+
 @end

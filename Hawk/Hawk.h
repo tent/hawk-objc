@@ -13,17 +13,26 @@
 #import "HawkAuthAttributes.h"
 #import "HawkResponse.h"
 #import "HawkError.h"
+#import "HawkCryptoOutput.h"
 
 @interface Hawk : NSObject
 
-+ (NSString *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes;
-+ (NSString *)mac:(HawkAuthAttributes *)attributes;
-+ (NSString *)responseMac:(HawkAuthAttributes *)attributes;
-+ (NSString *)bewit:(HawkAuthAttributes *)attributes;
-+ (NSString *)timestampSkewMac:(HawkAuthAttributes *)attributes;
+# pragma mark - Crypto
+
++ (HawkCryptoOutput *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes;
++ (HawkCryptoOutput *)mac:(HawkAuthAttributes *)attributes;
++ (HawkCryptoOutput *)responseMac:(HawkAuthAttributes *)attributes;
++ (HawkCryptoOutput *)bewit:(HawkAuthAttributes *)attributes;
++ (HawkCryptoOutput *)timestampSkewMac:(HawkAuthAttributes *)attributes;
+
+#pragma mark - Build Headers
+
 + (NSString *)authorizationHeader:(HawkAuthAttributes *)attributes;
 + (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes;
 + (NSString *)timestampSkewHeader:(HawkAuthAttributes *)attributes;
+
+#pragma mark - Validate Headers
+
 + (HawkResponse *)validateAuthorizationHeader:(NSString *)header
                            hawkAuthAttributes:(HawkAuthAttributes *)hawkAuthAttributes
                             credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup

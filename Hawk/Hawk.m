@@ -12,8 +12,7 @@
 
 @implementation Hawk
 
-+ (NSString *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes
-
++ (HawkCryptoOutput *)payloadHashWithAttributes:(HawkAuthAttributes *)attributes
 {
     NSMutableData *payloadNormalizedString = [[NSMutableData alloc] init];
 
@@ -26,12 +25,13 @@
     [payloadNormalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
     CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:attributes.credentials.algorithm];
-    NSData *output = [cryptoProxy digestFromData:[NSData dataWithData:payloadNormalizedString]];
+    NSData *value = [cryptoProxy digestFromData:[NSData dataWithData:payloadNormalizedString]];
 
-    return [output base64EncodedString];
+    HawkCryptoOutput *output = [HawkCryptoOutput hawkCryptoOutputWithInputData:payloadNormalizedString outputValue:[value base64EncodedString]];
+    return output;
 }
 
-+ (NSString *)mac:(HawkAuthAttributes *)attributes
++ (HawkCryptoOutput *)mac:(HawkAuthAttributes *)attributes
 {
     NSMutableData *normalizedString = [[NSMutableData alloc] init];
 
@@ -69,7 +69,7 @@
 
         // hash
         if (attributes.payload) {
-            [normalizedString appendData:[[self payloadHashWithAttributes:attributes] dataUsingEncoding:NSUTF8StringEncoding]];
+            [normalizedString appendData:[[self payloadHashWithAttributes:attributes].value dataUsingEncoding:NSUTF8StringEncoding]];
         }
         [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
@@ -91,18 +91,19 @@
     }
 
     CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:attributes.credentials.algorithm];
-    NSData *output = [cryptoProxy hmacFromData:[NSData dataWithData:normalizedString] withKey:attributes.credentials.key];
+    NSData *value = [cryptoProxy hmacFromData:[NSData dataWithData:normalizedString] withKey:attributes.credentials.key];
 
-    return [output base64EncodedString];
+    HawkCryptoOutput *output = [HawkCryptoOutput hawkCryptoOutputWithInputData:normalizedString outputValue:[value base64EncodedString]];
+    return output;
 }
 
-+ (NSString *)responseMac:(HawkAuthAttributes *)attributes
++ (HawkCryptoOutput *)responseMac:(HawkAuthAttributes *)attributes
 {
     attributes.hawkType = @"response";
     return [Hawk mac:attributes];
 }
 
-+ (NSString *)bewit:(HawkAuthAttributes *)attributes
++ (HawkCryptoOutput *)bewit:(HawkAuthAttributes *)attributes
 {
     HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
     authAttributes.hawkType = @"bewit";
@@ -118,22 +119,23 @@
         authAttributes.ext = @"";
     }
 
-    NSString *mac = [Hawk mac:authAttributes];
+    HawkCryptoOutput *mac = [Hawk mac:authAttributes];
 
-    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", authAttributes.credentials.hawkId, [authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", authAttributes.credentials.hawkId, [authAttributes.timestamp timeIntervalSince1970], mac.value, authAttributes.ext];
 
     NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
 
     bewit = [bewit stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
     bewit = [bewit stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 
-    return bewit;
+    HawkCryptoOutput *output = [HawkCryptoOutput hawkCryptoOutputWithInputData:mac.inputData outputValue:bewit];
+    return output;
 }
 
-+ (NSString *)timestampSkewMac:(HawkAuthAttributes *)attributes
++ (HawkCryptoOutput *)timestampSkewMac:(HawkAuthAttributes *)attributes
 {
     attributes.hawkType = @"ts";
-    NSString *tsm = [Hawk mac:attributes];
+    HawkCryptoOutput *tsm = [Hawk mac:attributes];
 
     return tsm;
 }
@@ -144,14 +146,14 @@
 
     [header appendData:[[NSString stringWithFormat:@"Authorization: Hawk id=\"%@\"", attributes.credentials.hawkId] dataUsingEncoding:NSUTF8StringEncoding]];
 
-    [header appendData:[[NSString stringWithFormat:@", mac=\"%@\"", [self mac:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendData:[[NSString stringWithFormat:@", mac=\"%@\"", [self mac:attributes].value] dataUsingEncoding:NSUTF8StringEncoding]];
 
     [header appendData:[[NSString stringWithFormat:@", ts=\"%li\"", (long int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     [header appendData:[[NSString stringWithFormat:@", nonce=\"%@\"", attributes.nonce] dataUsingEncoding:NSUTF8StringEncoding]];
 
     if (attributes.payload) {
-        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHashWithAttributes:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHashWithAttributes:attributes].value] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
     if (attributes.app) {
@@ -163,10 +165,10 @@
 
 + (NSString *)serverAuthorizationHeader:(HawkAuthAttributes *)attributes
 {
-    NSMutableData *header = [[NSMutableData alloc] initWithData:[[NSString stringWithFormat:@"Server-Authorization: Hawk mac=\"%@\"", [Hawk responseMac:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+    NSMutableData *header = [[NSMutableData alloc] initWithData:[[NSString stringWithFormat:@"Server-Authorization: Hawk mac=\"%@\"", [Hawk responseMac:attributes].value] dataUsingEncoding:NSUTF8StringEncoding]];
 
     if (attributes.payload) {
-        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [Hawk payloadHashWithAttributes:attributes]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [Hawk payloadHashWithAttributes:attributes].value] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
@@ -174,7 +176,7 @@
 
 + (NSString *)timestampSkewHeader:(HawkAuthAttributes *)attributes
 {
-    NSString *tsm = [Hawk timestampSkewMac:attributes];
+    NSString *tsm = [Hawk timestampSkewMac:attributes].value;
     NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%li\", tsm=\"%@\", error=\"timestamp skew too high\"", (long int)[attributes.timestamp timeIntervalSince1970], tsm];
 
     return header;
@@ -196,16 +198,16 @@
     authAttributes.credentials = credentials;
 
     if (authAttributes.payloadHash) {
-        NSString *expectedPayloadHash = [Hawk payloadHashWithAttributes:authAttributes];
-        if (![expectedPayloadHash isEqualToString:authAttributes.payloadHash]) {
-            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash];
+        HawkCryptoOutput *expectedPayloadHash = [Hawk payloadHashWithAttributes:authAttributes];
+        if (![expectedPayloadHash.value isEqualToString:authAttributes.payloadHash]) {
+            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash inputData:expectedPayloadHash.inputData];
         }
     }
 
-    NSString *expectedMac = [Hawk mac:authAttributes];
+    HawkCryptoOutput *expectedMac = [Hawk mac:authAttributes];
 
-    if (![expectedMac isEqualToString:authAttributes.mac]) {
-        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
+    if (![expectedMac.value isEqualToString:authAttributes.mac]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac inputData:expectedMac.inputData];
     }
 
     return [HawkResponse hawkResponseWithCredentials:credentials];
@@ -242,10 +244,10 @@
         return [HawkResponse hawkResponseWithErrorReason:HawkErrorBewitExpired];
     }
 
-    NSString *expectedMac = [Hawk mac:authAttributes];
+    HawkCryptoOutput *expectedMac = [Hawk mac:authAttributes];
 
-    if (![expectedMac isEqualToString:authAttributes.mac]) {
-        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
+    if (![expectedMac.value isEqualToString:authAttributes.mac]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac inputData:expectedMac.inputData];
     }
 
     return [HawkResponse hawkResponseWithCredentials:credentials];
@@ -256,18 +258,17 @@
     HawkAuthAttributes *authAttributes = [HawkAuthAttributes hawkAuthAttributesFromAuthorizationHeader:header];
     [authAttributes mergeHawkAuthAttributes:hawkAuthAttributes];
 
-    NSString *expectedMac = [Hawk responseMac:hawkAuthAttributes];
-
     if (authAttributes.payloadHash) {
-        NSString *expectedPayloadHash = [Hawk payloadHashWithAttributes:hawkAuthAttributes];
+        HawkCryptoOutput *expectedPayloadHash = [Hawk payloadHashWithAttributes:hawkAuthAttributes];
 
-        if (![expectedPayloadHash isEqualToString:authAttributes.payloadHash]) {
-            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash];
+        if (![expectedPayloadHash.value isEqualToString:authAttributes.payloadHash]) {
+            return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidPayloadHash inputData:expectedPayloadHash.inputData];
         }
     }
 
-    if (![expectedMac isEqualToString:authAttributes.mac]) {
-        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac];
+    HawkCryptoOutput *expectedMac = [Hawk responseMac:hawkAuthAttributes];
+    if (![expectedMac.value isEqualToString:authAttributes.mac]) {
+        return [HawkResponse hawkResponseWithErrorReason:HawkErrorInvalidMac inputData:expectedMac.inputData];
     }
 
     return [HawkResponse hawkResponseWithCredentials:authAttributes.credentials];

@@ -41,14 +41,14 @@
     // SHA1
     authAttributes.credentials.algorithm = CryptoAlgorithmSHA1;
     expectedHash = @"bsvY3IfUllw6V5rvk4tStEvpBhE=";
-    actualHash = [Hawk payloadHashWithAttributes:authAttributes];
+    actualHash = [Hawk payloadHashWithAttributes:authAttributes].value;
 
     XCTAssertEqualObjects(actualHash, expectedHash);
 
     // SHA256
     authAttributes.credentials.algorithm = CryptoAlgorithmSHA256;
     expectedHash = @"LjRmtkSKTW0ObTUyZ7N+vjClKd//KTTdfhF1M4XCuEM=";
-    actualHash = [Hawk payloadHashWithAttributes:authAttributes];
+    actualHash = [Hawk payloadHashWithAttributes:authAttributes].value;
 
     XCTAssertEqualObjects(actualHash, expectedHash);
 }
@@ -65,7 +65,7 @@
     authAttributes.ext = @"some-app-data";
 
     NSString *expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
-    NSString *actualBewit = [Hawk bewit:authAttributes];
+    NSString *actualBewit = [Hawk bewit:authAttributes].value;
 
     XCTAssertEqualObjects(actualBewit, expectedBewit);
 }
@@ -91,14 +91,14 @@
     // SHA1
     authAttributes.credentials.algorithm = CryptoAlgorithmSHA1;
     expectedMac = @"qbf1ZPG/r/e06F4ht+T77LXi5vw=";
-    actualMac = [Hawk mac:authAttributes];
+    actualMac = [Hawk mac:authAttributes].value;
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 
     // SHA256
     authAttributes.credentials.algorithm = CryptoAlgorithmSHA256;
     expectedMac = @"dh5kEkotNusOuHPolRYUhvy2vlhJybTC2pqBdUQk5z0=";
-    actualMac = [Hawk mac:authAttributes];
+    actualMac = [Hawk mac:authAttributes].value;
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 }
@@ -110,7 +110,7 @@
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1365741469];
 
     NSString *expectedMac = @"h/Ff6XI1euObD78ZNflapvLKXGuaw1RiLI4Q6Q5sAbM=";
-    NSString *actualMac = [Hawk timestampSkewHeader:authAttributes];
+    NSString *actualMac = [Hawk timestampSkewMac:authAttributes].value;
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 }

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HawkCredentials.h"
 #import "HawkError.h"
+#import "HawkCryptoOutput.h"
 
 @interface HawkResponse : NSObject
 
@@ -16,6 +17,7 @@
 @property (nonatomic) HawkError *error;
 
 + (HawkResponse *)hawkResponseWithCredentials:(HawkCredentials *)credentials;
-+ (HawkResponse *)hawkResponseWithErrorReason:(HawkErrorReason)error;
++ (HawkResponse *)hawkResponseWithErrorReason:(HawkErrorReason)reason;
++ (HawkResponse *)hawkResponseWithErrorReason:(HawkErrorReason)reason inputData:(NSData *)inputData;
 
 @end

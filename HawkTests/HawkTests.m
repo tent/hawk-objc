@@ -43,7 +43,7 @@
 {
     NSString *expectedHash = @"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=";
 
-    NSString *payloadHash = [Hawk payloadHashWithAttributes:authAttributes];
+    NSString *payloadHash = [Hawk payloadHashWithAttributes:authAttributes].value;
 
     XCTAssertEqualObjects(payloadHash, expectedHash);
 }
@@ -56,7 +56,7 @@
     authAttributes.nonce = @"3yuYCD4Z";
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *mac = [Hawk mac:authAttributes];
+    NSString *mac = [Hawk mac:authAttributes].value;
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -70,7 +70,7 @@
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
     authAttributes.payload = nil;
 
-    NSString *mac = [Hawk responseMac:authAttributes];
+    NSString *mac = [Hawk responseMac:authAttributes].value;
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -82,7 +82,7 @@
     authAttributes.nonce = @"3yuYCD4Z";
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *mac = [Hawk responseMac:authAttributes];
+    NSString *mac = [Hawk responseMac:authAttributes].value;
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -96,7 +96,7 @@
     authAttributes.method = @"GET";
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *bewit = [Hawk bewit:authAttributes];
+    NSString *bewit = [Hawk bewit:authAttributes].value;
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 
@@ -113,7 +113,7 @@
     authAttributes.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
 
-    bewit = [Hawk bewit:authAttributes];
+    bewit = [Hawk bewit:authAttributes].value;
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 }
@@ -250,7 +250,7 @@
     authAttributes.credentials = credentials;
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *tsm = [Hawk timestampSkewMac:authAttributes];
+    NSString *tsm = [Hawk timestampSkewMac:authAttributes].value;
 
     XCTAssertEqualObjects(expectedTsm, tsm);
 }
