@@ -100,8 +100,8 @@
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 
-    // Second Test Vector (doesn't ensure urlsafe base64 fn used, ensures far future timestamps work)
-    expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
+    // Second Test Vector (ensures far future timestamps work, "/" is replaced with "_")
+    expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcRDk0L0daVEwzbFpvSmx6cnBLZUtZWkswd3NzS21FalNrSStFZm51dHh1QT1c76u_77yw44Sy";
 
     authAttributes = [[HawkAuthAttributes alloc] init];
     authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:@"sha256"];
@@ -110,7 +110,7 @@
     authAttributes.requestUri = @"/resource/4?a=1&b=2";
     authAttributes.port = [NSNumber numberWithInt:80];
     authAttributes.host = @"example.com";
-    authAttributes.ext = @"some-app-data";
+    authAttributes.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
     authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
 
     bewit = [Hawk bewit:authAttributes];

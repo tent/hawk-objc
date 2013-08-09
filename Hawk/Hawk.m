@@ -45,7 +45,7 @@
     [normalizedString appendData:[[NSString stringWithFormat:@"hawk.1.%@\n", attributes.hawkType] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // timestamp
-    [normalizedString appendData:[[NSString stringWithFormat:@"%li\n", (long int)[attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendData:[[NSString stringWithFormat:@"%.0f\n", [attributes.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     if (![attributes.hawkType isEqualToString:@"ts"]) {
         // nonce
@@ -126,9 +126,12 @@
 
     NSString *mac = [Hawk mac:authAttributes];
 
-    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%li\\%@\\%@", authAttributes.credentials.hawkId, (long int)[authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", authAttributes.credentials.hawkId, [authAttributes.timestamp timeIntervalSince1970], mac, authAttributes.ext];
 
     NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
+
+    bewit = [bewit stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
+    bewit = [bewit stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 
     return bewit;
 }
