@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
   s.author       = { "Jesse Stuart" => "jesse@jessestuart.ca" }
 
-  s.source       = { :git => "https://github.com/tent/hawk-objc.git", :commit => "ed89bd0" }
+  s.source       = { :git => "https://github.com/tent/hawk-objc.git", :commit => "3ce938c" }
 
   s.ios.deployment_target = '7.0'
   s.osx.deployment_target = '10.8'
