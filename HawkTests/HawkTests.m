@@ -24,7 +24,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
 
     authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:@"sha256"];
+    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:CryptoAlgorithmSHA256];
     authAttributes.contentType = @"application/vnd.tent.post.v0+json";
     authAttributes.method = @"POST";
     authAttributes.requestUri = @"/posts";
@@ -104,7 +104,7 @@
     expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcRDk0L0daVEwzbFpvSmx6cnBLZUtZWkswd3NzS21FalNrSStFZm51dHh1QT1c76u_77yw44Sy";
 
     authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:@"sha256"];
+    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
 
     authAttributes.method = @"GET";
     authAttributes.requestUri = @"/resource/4?a=1&b=2";

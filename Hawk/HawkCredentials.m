@@ -10,7 +10,7 @@
 
 @implementation HawkCredentials
 
-- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(NSString *)algorithm
+- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(CryptoAlgorithm)algorithm
 {
     self = [super init];
 

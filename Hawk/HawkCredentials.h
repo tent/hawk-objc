@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CryptoProxy.h"
 
 @interface HawkCredentials : NSObject
 
 @property (copy) NSString *hawkId;
 @property (copy) NSString *key;
-@property (copy) NSString *algorithm;
+@property (nonatomic) CryptoAlgorithm algorithm;
 
-- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(NSString *)algorithm;
+- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(CryptoAlgorithm)algorithm;
 
 @end

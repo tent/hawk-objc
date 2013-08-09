@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <CommonCrypto/CommonDigest.h>
-#import <CommonCrypto/CommonHMAC.h>
-#import <CommonCrypto/CommonCryptor.h>
-
 #import "NSData+Base64.h"
 
 #import "HawkAuthAttributes.h"

@@ -25,10 +25,8 @@
     [payloadNormalizedString appendData:attributes.payload];
     [payloadNormalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
-    unsigned char hash[CC_SHA256_DIGEST_LENGTH];
-    CC_SHA256(payloadNormalizedString.mutableBytes, (CC_LONG)payloadNormalizedString.length, hash);
-
-    NSData *output = [NSData dataWithBytes:hash length:CC_SHA256_DIGEST_LENGTH];
+    CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:attributes.credentials.algorithm];
+    NSData *output = [cryptoProxy digestFromData:[NSData dataWithData:payloadNormalizedString]];
 
     return [output base64EncodedString];
 }
@@ -92,12 +90,8 @@
         }
     }
 
-    const char *key = [attributes.credentials.key cStringUsingEncoding:NSUTF8StringEncoding];
-    unsigned char hmac[CC_SHA256_DIGEST_LENGTH];
-
-    CCHmac(kCCHmacAlgSHA256, key, strlen(key), normalizedString.mutableBytes, (CC_LONG)normalizedString.length, hmac);
-
-    NSData *output = [NSData dataWithBytes:hmac length:CC_SHA256_DIGEST_LENGTH];
+    CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:attributes.credentials.algorithm];
+    NSData *output = [cryptoProxy hmacFromData:[NSData dataWithData:normalizedString] withKey:attributes.credentials.key];
 
     return [output base64EncodedString];
 }
