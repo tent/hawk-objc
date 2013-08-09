@@ -27,3 +27,8 @@ pod 'Hawk', :git => 'https://github.com/tent/hawk-objc.git'
 ```objective-c
 #import <HawkAuth.h>
 ```
+
+### Testing
+
+Open the workspace in Xcode 5 or later and run tests against the Hawk and libhawk build targets (cmd+U).
+
