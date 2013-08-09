@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		88417BE917B59C4B0096F45F /* libHawk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C92417B2DF6F0056A6F9 /* libHawk.a */; };
-		8857C8E117B2DDD40056A6F9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8E017B2DDD40056A6F9 /* Cocoa.framework */; };
+		88417BEC17B5A0E60096F45F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88417BEB17B5A0E60096F45F /* Foundation.framework */; };
+		88417BEE17B5A0F00096F45F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88417BED17B5A0F00096F45F /* Foundation.framework */; };
 		8857C8EB17B2DDD40056A6F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8857C8E917B2DDD40056A6F9 /* InfoPlist.strings */; };
 		8857C8F617B2DDD40056A6F9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8F517B2DDD40056A6F9 /* XCTest.framework */; };
-		8857C8F717B2DDD40056A6F9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8E017B2DDD40056A6F9 /* Cocoa.framework */; };
 		8857C8FA17B2DDD40056A6F9 /* Hawk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8DD17B2DDD40056A6F9 /* Hawk.framework */; };
 		8857C90017B2DDD40056A6F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8857C8FE17B2DDD40056A6F9 /* InfoPlist.strings */; };
 		8857C90217B2DDD40056A6F9 /* HawkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90117B2DDD40056A6F9 /* HawkTests.m */; };
@@ -21,7 +21,6 @@
 		8857C91317B2DE4F0056A6F9 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90F17B2DE4F0056A6F9 /* NSString+Base64.m */; };
 		8857C91E17B2DE9F0056A6F9 /* HawkCredentials.h in Headers */ = {isa = PBXBuildFile; fileRef = 8857C91817B2DE9F0056A6F9 /* HawkCredentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8857C91F17B2DE9F0056A6F9 /* HawkCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C91917B2DE9F0056A6F9 /* HawkCredentials.m */; };
-		8857C93617B2DF700056A6F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C93517B2DF700056A6F9 /* UIKit.framework */; };
 		8857C93F17B2DF700056A6F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8857C93D17B2DF700056A6F9 /* InfoPlist.strings */; };
 		8857C95217B2DFE00056A6F9 /* HawkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90117B2DDD40056A6F9 /* HawkTests.m */; };
 		8857C96817B2E31D0056A6F9 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 8857C90D17B2DE4F0056A6F9 /* NSData+Base64.m */; };
@@ -30,8 +29,6 @@
 		8857C97417B2E4120056A6F9 /* HawkCredentials.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8857C91817B2DE9F0056A6F9 /* HawkCredentials.h */; };
 		8857C97517B2E4120056A6F9 /* NSData+Base64.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8857C90C17B2DE4F0056A6F9 /* NSData+Base64.h */; };
 		8857C97617B2E4120056A6F9 /* NSString+Base64.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8857C90E17B2DE4F0056A6F9 /* NSString+Base64.h */; };
-		8857C99517B2FCFC0056A6F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C99417B2FCFC0056A6F9 /* Foundation.framework */; };
-		8857C99617B2FD5D0056A6F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C99417B2FCFC0056A6F9 /* Foundation.framework */; };
 		8857C9C917B3010C0056A6F9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C8F517B2DDD40056A6F9 /* XCTest.framework */; };
 		885DE67617B411A20066BD9B /* HawkError.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE67417B411A20066BD9B /* HawkError.h */; };
 		885DE67717B411A20066BD9B /* HawkError.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67517B411A20066BD9B /* HawkError.m */; };
@@ -82,11 +79,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		88417BEB17B5A0E60096F45F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		88417BED17B5A0F00096F45F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8857C8DD17B2DDD40056A6F9 /* Hawk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hawk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8857C8E017B2DDD40056A6F9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		8857C8E317B2DDD40056A6F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		8857C8E417B2DDD40056A6F9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		8857C8E517B2DDD40056A6F9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		8857C8E817B2DDD40056A6F9 /* Hawk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Hawk-Info.plist"; sourceTree = "<group>"; };
 		8857C8EA17B2DDD40056A6F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8857C8EC17B2DDD40056A6F9 /* Hawk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hawk-Prefix.pch"; sourceTree = "<group>"; };
@@ -102,14 +97,12 @@
 		8857C91817B2DE9F0056A6F9 /* HawkCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HawkCredentials.h; sourceTree = "<group>"; };
 		8857C91917B2DE9F0056A6F9 /* HawkCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HawkCredentials.m; sourceTree = "<group>"; };
 		8857C92417B2DF6F0056A6F9 /* libHawk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHawk.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8857C92517B2DF6F0056A6F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8857C92917B2DF700056A6F9 /* libhawk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libhawk-Prefix.pch"; sourceTree = "<group>"; };
 		8857C92A17B2DF700056A6F9 /* libhawk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libhawk.h; sourceTree = "<group>"; };
 		8857C93217B2DF700056A6F9 /* libhawkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libhawkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8857C93517B2DF700056A6F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		8857C93C17B2DF700056A6F9 /* libhawkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libhawkTests-Info.plist"; sourceTree = "<group>"; };
 		8857C93E17B2DF700056A6F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8857C99417B2FCFC0056A6F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		885DE67417B411A20066BD9B /* HawkError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HawkError.h; sourceTree = "<group>"; };
 		885DE67517B411A20066BD9B /* HawkError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HawkError.m; sourceTree = "<group>"; };
 		885DE67E17B54CCA0066BD9B /* CryptoProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoProxy.h; sourceTree = "<group>"; };
@@ -126,7 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8857C8E117B2DDD40056A6F9 /* Cocoa.framework in Frameworks */,
+				88417BEC17B5A0E60096F45F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8857C8F717B2DDD40056A6F9 /* Cocoa.framework in Frameworks */,
 				8857C8F617B2DDD40056A6F9 /* XCTest.framework in Frameworks */,
 				8857C8FA17B2DDD40056A6F9 /* Hawk.framework in Frameworks */,
 			);
@@ -144,7 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8857C99617B2FD5D0056A6F9 /* Foundation.framework in Frameworks */,
+				88417BEE17B5A0F00096F45F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,8 +146,6 @@
 			files = (
 				88417BE917B59C4B0096F45F /* libHawk.a in Frameworks */,
 				8857C9C917B3010C0056A6F9 /* XCTest.framework in Frameworks */,
-				8857C99517B2FCFC0056A6F9 /* Foundation.framework in Frameworks */,
-				8857C93617B2DF700056A6F9 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,24 +178,12 @@
 		8857C8DF17B2DDD40056A6F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8857C99417B2FCFC0056A6F9 /* Foundation.framework */,
-				8857C8E017B2DDD40056A6F9 /* Cocoa.framework */,
+				88417BED17B5A0F00096F45F /* Foundation.framework */,
+				88417BEB17B5A0E60096F45F /* Foundation.framework */,
 				8857C8F517B2DDD40056A6F9 /* XCTest.framework */,
-				8857C92517B2DF6F0056A6F9 /* Foundation.framework */,
 				8857C93517B2DF700056A6F9 /* UIKit.framework */,
-				8857C8E217B2DDD40056A6F9 /* Other Frameworks */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8857C8E217B2DDD40056A6F9 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				8857C8E317B2DDD40056A6F9 /* Foundation.framework */,
-				8857C8E417B2DDD40056A6F9 /* CoreData.framework */,
-				8857C8E517B2DDD40056A6F9 /* AppKit.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		8857C8E617B2DDD40056A6F9 /* Hawk */ = {
