@@ -50,6 +50,8 @@
 		885DE68017B54CCA0066BD9B /* CryptoProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE67E17B54CCA0066BD9B /* CryptoProxy.h */; };
 		885DE68117B54CCA0066BD9B /* CryptoProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67F17B54CCA0066BD9B /* CryptoProxy.m */; };
 		885DE68217B54CCA0066BD9B /* CryptoProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67F17B54CCA0066BD9B /* CryptoProxy.m */; };
+		885DE68417B558BC0066BD9B /* HawkCryptoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE68317B558BC0066BD9B /* HawkCryptoTests.m */; };
+		885DE68517B558BC0066BD9B /* HawkCryptoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE68317B558BC0066BD9B /* HawkCryptoTests.m */; };
 		885F848317B333B30083007A /* NSString+Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 885F848117B333B30083007A /* NSString+Parser.h */; };
 		885F848417B333B30083007A /* NSString+Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 885F848217B333B30083007A /* NSString+Parser.m */; };
 		885F848517B333B30083007A /* NSString+Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 885F848217B333B30083007A /* NSString+Parser.m */; };
@@ -128,6 +130,7 @@
 		885DE67517B411A20066BD9B /* HawkError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HawkError.m; sourceTree = "<group>"; };
 		885DE67E17B54CCA0066BD9B /* CryptoProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoProxy.h; sourceTree = "<group>"; };
 		885DE67F17B54CCA0066BD9B /* CryptoProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptoProxy.m; sourceTree = "<group>"; };
+		885DE68317B558BC0066BD9B /* HawkCryptoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HawkCryptoTests.m; sourceTree = "<group>"; };
 		885F848117B333B30083007A /* NSString+Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Parser.h"; sourceTree = "<group>"; };
 		885F848217B333B30083007A /* NSString+Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Parser.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -255,6 +258,7 @@
 		8857C8FB17B2DDD40056A6F9 /* HawkTests */ = {
 			isa = PBXGroup;
 			children = (
+				885DE68317B558BC0066BD9B /* HawkCryptoTests.m */,
 				8857C90117B2DDD40056A6F9 /* HawkTests.m */,
 				8857C8FC17B2DDD40056A6F9 /* Supporting Files */,
 			);
@@ -494,6 +498,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8857C90217B2DDD40056A6F9 /* HawkTests.m in Sources */,
+				885DE68417B558BC0066BD9B /* HawkCryptoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +523,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8857C95217B2DFE00056A6F9 /* HawkTests.m in Sources */,
+				885DE68517B558BC0066BD9B /* HawkCryptoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
