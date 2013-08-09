@@ -22,11 +22,8 @@ typedef NS_ENUM(NSUInteger, HawkErrorReason) {
 @interface HawkError : NSObject
 
 @property (nonatomic) HawkErrorReason errorReason;
-@property (copy) NSString *normalizedString;
 
 + (HawkError *)hawkErrorWithReason:(HawkErrorReason)reason;
-+ (HawkError *)hawkErrorWithReason:(HawkErrorReason)reason
-                  normalizedString:(NSString *)normalizedString;
 
 + (NSString *)messageForReason:(HawkErrorReason)reason;
 

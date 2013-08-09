@@ -18,14 +18,6 @@
     return error;
 }
 
-+ (HawkError *)hawkErrorWithReason:(HawkErrorReason)reason normalizedString:(NSString *)normalizedString
-{
-    HawkError *error = [HawkError hawkErrorWithReason:reason];
-    error.normalizedString = normalizedString;
-
-    return error;
-}
-
 + (NSString *)messageForReason:(HawkErrorReason)reason
 {
     NSString *message;

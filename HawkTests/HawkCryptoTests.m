@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Hawk.h"
+#import "HawkAuth.h"
 
 
 @interface HawkCryptoTests : XCTestCase
@@ -30,42 +30,42 @@
 - (void)testPayloadHashWith
 {
     // Common setup
-    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
-    authAttributes.contentType = @"";
-    authAttributes.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.contentType = @"";
+    auth.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
 
     NSString *expectedHash;
     NSString *actualHash;
 
     // SHA1
-    authAttributes.credentials.algorithm = CryptoAlgorithmSHA1;
+    auth.credentials.algorithm = CryptoAlgorithmSHA1;
     expectedHash = @"bsvY3IfUllw6V5rvk4tStEvpBhE=";
-    actualHash = [Hawk payloadHashWithAttributes:authAttributes].value;
+    actualHash = [auth payloadHash];
 
     XCTAssertEqualObjects(actualHash, expectedHash);
 
     // SHA256
-    authAttributes.credentials.algorithm = CryptoAlgorithmSHA256;
+    auth.credentials.algorithm = CryptoAlgorithmSHA256;
     expectedHash = @"LjRmtkSKTW0ObTUyZ7N+vjClKd//KTTdfhF1M4XCuEM=";
-    actualHash = [Hawk payloadHashWithAttributes:authAttributes].value;
+    actualHash = [auth payloadHash];
 
     XCTAssertEqualObjects(actualHash, expectedHash);
 }
 
 - (void)testBewit
 {
-    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
-    authAttributes.method = @"GET";
-    authAttributes.requestUri = @"/resource/4?a=1&b=2";
-    authAttributes.host = @"example.com";
-    authAttributes.port = [NSNumber numberWithInt:80];
-    authAttributes.ext = @"some-app-data";
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
+    auth.method = @"GET";
+    auth.requestUri = @"/resource/4?a=1&b=2";
+    auth.host = @"example.com";
+    auth.port = [NSNumber numberWithInt:80];
+    auth.ext = @"some-app-data";
 
     NSString *expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
-    NSString *actualBewit = [Hawk bewit:authAttributes].value;
+    NSString *actualBewit = [auth bewit];
 
     XCTAssertEqualObjects(actualBewit, expectedBewit);
 }
@@ -73,44 +73,44 @@
 - (void)testMac
 {
     // Common setup
-    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1353809207];
-    authAttributes.contentType = @"";
-    authAttributes.method = @"POST";
-    authAttributes.requestUri = @"/somewhere/over/the/rainbow";
-    authAttributes.host = @"example.net";
-    authAttributes.port = [NSNumber numberWithInt:80];
-    authAttributes.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
-    authAttributes.ext = @"Bazinga!";
-    authAttributes.nonce = @"Ygvqdz";
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1353809207];
+    auth.contentType = @"";
+    auth.method = @"POST";
+    auth.requestUri = @"/somewhere/over/the/rainbow";
+    auth.host = @"example.net";
+    auth.port = [NSNumber numberWithInt:80];
+    auth.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.ext = @"Bazinga!";
+    auth.nonce = @"Ygvqdz";
 
     NSString *expectedMac;
     NSString *actualMac;
 
     // SHA1
-    authAttributes.credentials.algorithm = CryptoAlgorithmSHA1;
+    auth.credentials.algorithm = CryptoAlgorithmSHA1;
     expectedMac = @"qbf1ZPG/r/e06F4ht+T77LXi5vw=";
-    actualMac = [Hawk mac:authAttributes].value;
+    actualMac = [auth hmacWithType:HawkAuthTypeHeader];
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 
     // SHA256
-    authAttributes.credentials.algorithm = CryptoAlgorithmSHA256;
+    auth.credentials.algorithm = CryptoAlgorithmSHA256;
     expectedMac = @"dh5kEkotNusOuHPolRYUhvy2vlhJybTC2pqBdUQk5z0=";
-    actualMac = [Hawk mac:authAttributes].value;
+    actualMac = [auth hmacWithType:HawkAuthTypeHeader];
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 }
 
 - (void)timestampSkewMac
 {
-    HawkAuthAttributes *authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1365741469];
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1365741469];
 
     NSString *expectedMac = @"h/Ff6XI1euObD78ZNflapvLKXGuaw1RiLI4Q6Q5sAbM=";
-    NSString *actualMac = [Hawk timestampSkewMac:authAttributes].value;
+    NSString *actualMac = [auth timestampSkewHmac];
 
     XCTAssertEqualObjects(actualMac, expectedMac);
 }

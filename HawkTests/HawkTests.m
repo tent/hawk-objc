@@ -7,12 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Hawk.h"
-
+#import "HawkAuth.h"
+#import "NSData+Base64.h"
 
 @interface HawkTests : XCTestCase
 {
-    HawkAuthAttributes *authAttributes;
+    HawkAuth *auth;
 }
 @end
 
@@ -23,14 +23,14 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 
-    authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:CryptoAlgorithmSHA256];
-    authAttributes.contentType = @"application/vnd.tent.post.v0+json";
-    authAttributes.method = @"POST";
-    authAttributes.requestUri = @"/posts";
-    authAttributes.host = @"example.com";
-    authAttributes.port = [[NSNumber alloc] initWithInt:443];
-    authAttributes.payload = [@"{\"type\":\"https://tent.io/types/status/v0#\"}" dataUsingEncoding:NSUTF8StringEncoding];
+    auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.contentType = @"application/vnd.tent.post.v0+json";
+    auth.method = @"POST";
+    auth.requestUri = @"/posts";
+    auth.host = @"example.com";
+    auth.port = [[NSNumber alloc] initWithInt:443];
+    auth.payload = [@"{\"type\":\"https://tent.io/types/status/v0#\"}" dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (void)tearDown
@@ -43,7 +43,7 @@
 {
     NSString *expectedHash = @"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=";
 
-    NSString *payloadHash = [Hawk payloadHashWithAttributes:authAttributes].value;
+    NSString *payloadHash = [auth payloadHash];
 
     XCTAssertEqualObjects(payloadHash, expectedHash);
 }
@@ -52,11 +52,11 @@
 {
     NSString *expectedMac = @"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=";
 
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *mac = [Hawk mac:authAttributes].value;
+    NSString *mac = [auth hmacWithType:HawkAuthTypeHeader];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -65,12 +65,12 @@
 {
     NSString *expectedMac = @"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=";
 
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    authAttributes.payload = nil;
+    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.payload = nil;
 
-    NSString *mac = [Hawk responseMac:authAttributes].value;
+    NSString *mac = [auth hmacWithType:HawkAuthTypeResponse];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -79,10 +79,10 @@
 {
     NSString *expectedMac = @"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=";
 
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *mac = [Hawk responseMac:authAttributes].value;
+    NSString *mac = [auth hmacWithType:HawkAuthTypeResponse];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -92,28 +92,28 @@
     // First Test Vector (doesn't ensure urlsafe base64 fn used)
     NSString *expectedBewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
-    authAttributes.payload = nil;
-    authAttributes.method = @"GET";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.payload = nil;
+    auth.method = @"GET";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *bewit = [Hawk bewit:authAttributes].value;
+    NSString *bewit = [auth bewit];
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 
     // Second Test Vector (ensures far future timestamps work, "/" is replaced with "_")
     expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcRDk0L0daVEwzbFpvSmx6cnBLZUtZWkswd3NzS21FalNrSStFZm51dHh1QT1c76u_77yw44Sy";
 
-    authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
 
-    authAttributes.method = @"GET";
-    authAttributes.requestUri = @"/resource/4?a=1&b=2";
-    authAttributes.port = [NSNumber numberWithInt:80];
-    authAttributes.host = @"example.com";
-    authAttributes.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
+    auth.method = @"GET";
+    auth.requestUri = @"/resource/4?a=1&b=2";
+    auth.port = [NSNumber numberWithInt:80];
+    auth.host = @"example.com";
+    auth.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
 
-    bewit = [Hawk bewit:authAttributes].value;
+    bewit = [auth bewit];
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 }
@@ -122,49 +122,47 @@
 {
     NSString *bewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
-    authAttributes.payload = nil;
-    authAttributes.method = @"GET";
+    auth.payload = nil;
+    auth.method = @"GET";
 
-    HawkResponse *response = [Hawk validateBewit:bewit hawkAuthAttributes:authAttributes serverTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800] credentialsLookup:^HawkCredentials *(NSString *hawkId) {
-        if ([hawkId isEqualToString:authAttributes.credentials.hawkId]) {
-            return authAttributes.credentials;
+    HawkError *error = [auth validateBewit:bewit credentialsLookup:^HawkCredentials *(NSString * hawkId) {
+        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
+            return auth.credentials;
         } else {
             return nil;
         }
-    }];
+    } serverTime:[NSDate dateWithTimeIntervalSince1970:1368996800]];
 
-    XCTAssert(!response.error);
-    XCTAssertEqual(authAttributes.credentials, response.credentials);
+    XCTAssert(!error);
 }
 
 - (void)testExpiredBewitValidation
 {
     NSString *bewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
-    authAttributes.payload = nil;
-    authAttributes.method = @"GET";
+    auth.payload = nil;
+    auth.method = @"GET";
 
-    HawkResponse *response = [Hawk validateBewit:bewit hawkAuthAttributes:authAttributes serverTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800 - 1] credentialsLookup:^HawkCredentials *(NSString *hawkId) {
-        if ([hawkId isEqualToString:authAttributes.credentials.hawkId]) {
-            return authAttributes.credentials;
+    HawkError *error = [auth validateBewit:bewit credentialsLookup:^HawkCredentials *(NSString * hawkId) {
+        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
+            return auth.credentials;
         } else {
             return nil;
         }
-    }];
+    } serverTime:[NSDate dateWithTimeIntervalSince1970:1368996800-1]];
 
-    XCTAssert(HawkErrorBewitExpired == response.error.errorReason);
-    XCTAssert(!response.credentials);
+    XCTAssertNotNil(error);
 }
 
 - (void)testAuthorizationHeader
 {
     NSString *expectedHeader = @"Authorization: Hawk id=\"exqbZWtykFZIh2D7cXi9dA\", mac=\"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=\", ts=\"1368996800\", nonce=\"3yuYCD4Z\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\", app=\"wn6yzHGe5TLaT-fvOPbAyQ\"";
 
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *header = [Hawk authorizationHeader:authAttributes];
+    NSString *header = [auth requestHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
@@ -173,30 +171,29 @@
 {
     NSString *header = @"Authorization: Hawk id=\"exqbZWtykFZIh2D7cXi9dA\", mac=\"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=\", ts=\"1368996800\", nonce=\"3yuYCD4Z\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\", app=\"wn6yzHGe5TLaT-fvOPbAyQ\"";
 
-    HawkResponse *response = [Hawk validateAuthorizationHeader:header hawkAuthAttributes:authAttributes credentialsLookup:^HawkCredentials *(NSString *hawkId) {
-        if ([hawkId isEqualToString:authAttributes.credentials.hawkId]) {
-            return authAttributes.credentials;
-        } else {
-            return nil;
+    HawkError *error = [auth validateRequestHeader:header credentialsLookup:^HawkCredentials *(NSString *hawkId) {
+        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
+            return auth.credentials;
         }
+
+        return nil;
     } nonceLookup:^BOOL(NSString *nonce) {
         return NO;
     }];
 
-    XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
-    XCTAssert(!response.error);
+    XCTAssert(!error);
 }
 
 - (void)testServerAuthorizationHeader
 {
     NSString *expectedHeader = @"Server-Authorization: Hawk mac=\"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=\"";
 
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    authAttributes.payload = nil;
+    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.payload = nil;
 
-    NSString *header = [Hawk serverAuthorizationHeader:authAttributes];
+    NSString *header = [auth responseHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
@@ -205,10 +202,10 @@
 {
     NSString *expectedHeader = @"Server-Authorization: Hawk mac=\"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\"";
 
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *header = [Hawk serverAuthorizationHeader:authAttributes];
+    NSString *header = [auth responseHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
@@ -217,40 +214,38 @@
 {
     NSString *header = @"Server-Authorization: Hawk mac=\"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=\"";
 
-    authAttributes.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    authAttributes.payload = nil;
+    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.payload = nil;
 
-    HawkResponse *response = [Hawk validateServerAuthorizationHeader:header hawkAuthAttributes:authAttributes];
+    HawkError *error = [auth validateResponseHeader:header];
 
-    XCTAssert(!response.error);
-    XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
+    XCTAssert(!error);
 }
 
 - (void)testServerAuthorizationHeaderWithPayloadValidation
 {
     NSString *header = @"Server-Authorization: Hawk mac=\"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\"";
 
-    authAttributes.nonce = @"3yuYCD4Z";
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    auth.nonce = @"3yuYCD4Z";
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    HawkResponse *response = [Hawk validateServerAuthorizationHeader:header hawkAuthAttributes:authAttributes];
+    HawkError *error = [auth validateResponseHeader:header];
 
-    XCTAssert(!response.error);
-    XCTAssertEqualObjects(authAttributes.credentials, response.credentials);
+    XCTAssert(!error);
 }
 
 - (void)testTimestampSkew
 {
     NSString *expectedTsm = @"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=";
 
-    HawkCredentials *credentials = authAttributes.credentials;
-    authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = credentials;
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    HawkCredentials *credentials = auth.credentials;
+    auth = [[HawkAuth alloc] init];
+    auth.credentials = credentials;
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *tsm = [Hawk timestampSkewMac:authAttributes].value;
+    NSString *tsm = [auth timestampSkewHmac];
 
     XCTAssertEqualObjects(expectedTsm, tsm);
 }
@@ -259,12 +254,12 @@
 {
     NSString *expectedHeader = @"WWW-Authenticate: Hawk ts=\"1368996800\", tsm=\"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=\", error=\"timestamp skew too high\"";
 
-    HawkCredentials *credentials = authAttributes.credentials;
-    authAttributes = [[HawkAuthAttributes alloc] init];
-    authAttributes.credentials = credentials;
-    authAttributes.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+    HawkCredentials *credentials = auth.credentials;
+    auth = [[HawkAuth alloc] init];
+    auth.credentials = credentials;
+    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
 
-    NSString *header = [Hawk timestampSkewHeader:authAttributes];
+    NSString *header = [auth timestampSkewHeader];
 
     XCTAssertEqualObjects(expectedHeader, header);
 }
