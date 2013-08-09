@@ -26,6 +26,32 @@ typedef NS_ENUM(NSUInteger, CryptoAlgorithm) {
 
 + (CryptoProxy *)cryptoProxyWithAlgorithm:(CryptoAlgorithm)algorithm;
 
+#pragma mark - Digest
+
++ (NSData *)sha1DigestFromData:(NSData *)input;
+
++ (NSData *)sha224DigestFromData:(NSData *)input;
+
++ (NSData *)sha256DigestFromData:(NSData *)input;
+
++ (NSData *)sha384DigestFromData:(NSData *)input;
+
++ (NSData *)sha512DigestFromData:(NSData *)input;
+
+# pragma mark - Hmac
+
++ (NSData *)sha1HmacFromData:(NSData *)input withKey:(NSString *)key;
+
++ (NSData *)sha224HmacFromData:(NSData *)input withKey:(NSString *)key;
+
++ (NSData *)sha256HmacFromData:(NSData *)input withKey:(NSString *)key;
+
++ (NSData *)sha384HmacFromData:(NSData *)input withKey:(NSString *)key;
+
++ (NSData *)sha512HmacFromData:(NSData *)input withKey:(NSString *)key;
+
+#pragma mark -
+
 - (NSData *)digestFromData:(NSData *)input;
 
 - (NSData *)hmacFromData:(NSData *)input withKey:(NSString *)key;
