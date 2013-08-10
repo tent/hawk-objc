@@ -13,7 +13,7 @@ pod 'Hawk', :git => 'https://github.com/tent/hawk-objc.git'
 ```
 
 ```objective-c
-#import <HawkAuth.h>
+#import <Hawk/HawkAuth.h>
 ```
 
 ### iOS
@@ -25,7 +25,7 @@ pod 'Hawk', :git => 'https://github.com/tent/hawk-objc.git'
 ```
 
 ```objective-c
-#import <HawkAuth.h>
+#import <Hawk/HawkAuth.h>
 ```
 
 ### Testing
