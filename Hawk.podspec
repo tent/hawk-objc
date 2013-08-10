@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Hawk"
-  s.version      = "0.1.0"
+  s.version      = "0.1.1"
   s.summary      = "Hawk authentication scheme."
   s.homepage     = "https://github.com/tent/hawk-objc"
 
@@ -14,8 +14,6 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.8'
 
   s.source_files = 'Hawk/**/*.{h,m}'
-
-  s.framework  = 'Foundation.framework'
 
   s.requires_arc = true
 end
