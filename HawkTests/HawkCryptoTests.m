@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 #import "HawkAuth.h"
 
-
 @interface HawkCryptoTests : XCTestCase
 @end
 
@@ -48,6 +47,58 @@
     // SHA256
     auth.credentials.algorithm = CryptoAlgorithmSHA256;
     expectedHash = @"LjRmtkSKTW0ObTUyZ7N+vjClKd//KTTdfhF1M4XCuEM=";
+    actualHash = [auth payloadHash];
+
+    XCTAssertEqualObjects(actualHash, expectedHash);
+}
+
+- (void)testPayloadHashWithComplexContentType
+{
+    // Common setup
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"" withKey:@"" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.contentType = @"text/plain; type=\"something\"";
+    auth.payload = [@"Something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+
+    NSString *expectedHash;
+    NSString *actualHash;
+
+    // SHA1
+    auth.credentials.algorithm = CryptoAlgorithmSHA1;
+    expectedHash = @"s3exeO2OBG5Q198BIN1HvEsbVB4=";
+    actualHash = [auth payloadHash];
+
+    XCTAssertEqualObjects(actualHash, expectedHash);
+
+    // SHA256
+    auth.credentials.algorithm = CryptoAlgorithmSHA256;
+    expectedHash = @"RBzsyF5kNxkvMWvOKj90ULW1LHqOwqRo1sAEjjUkPuo=";
+    actualHash = [auth payloadHash];
+
+    XCTAssertEqualObjects(actualHash, expectedHash);
+}
+
+- (void)testPayloadHashWithWhiteSpaceInContentType
+{
+    // Common setup
+    HawkAuth *auth = [[HawkAuth alloc] init];
+    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"" withKey:@"" withAlgorithm:CryptoAlgorithmSHA256];
+    auth.contentType = @" text/plain ; type=\"something\"";
+    auth.payload = [@"Something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+
+    NSString *expectedHash;
+    NSString *actualHash;
+
+    // SHA1
+    auth.credentials.algorithm = CryptoAlgorithmSHA1;
+    expectedHash = @"s3exeO2OBG5Q198BIN1HvEsbVB4=";
+    actualHash = [auth payloadHash];
+
+    XCTAssertEqualObjects(actualHash, expectedHash);
+
+    // SHA256
+    auth.credentials.algorithm = CryptoAlgorithmSHA256;
+    expectedHash = @"RBzsyF5kNxkvMWvOKj90ULW1LHqOwqRo1sAEjjUkPuo=";
     actualHash = [auth payloadHash];
 
     XCTAssertEqualObjects(actualHash, expectedHash);

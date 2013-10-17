@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88178A9A18105C2400F73EA3 /* NSString+Trim.h in Headers */ = {isa = PBXBuildFile; fileRef = 88178A9818105C2400F73EA3 /* NSString+Trim.h */; };
+		88178A9B18105C2400F73EA3 /* NSString+Trim.m in Sources */ = {isa = PBXBuildFile; fileRef = 88178A9918105C2400F73EA3 /* NSString+Trim.m */; };
+		88178A9C18105C2400F73EA3 /* NSString+Trim.m in Sources */ = {isa = PBXBuildFile; fileRef = 88178A9918105C2400F73EA3 /* NSString+Trim.m */; };
 		88417BE917B59C4B0096F45F /* libHawk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8857C92417B2DF6F0056A6F9 /* libHawk.a */; };
 		88417BEC17B5A0E60096F45F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88417BEB17B5A0E60096F45F /* Foundation.framework */; };
 		88417BEE17B5A0F00096F45F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88417BED17B5A0F00096F45F /* Foundation.framework */; };
@@ -79,6 +82,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		88178A9818105C2400F73EA3 /* NSString+Trim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Trim.h"; sourceTree = "<group>"; };
+		88178A9918105C2400F73EA3 /* NSString+Trim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Trim.m"; sourceTree = "<group>"; };
 		88417BEB17B5A0E60096F45F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		88417BED17B5A0F00096F45F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8857C8DD17B2DDD40056A6F9 /* Hawk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hawk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +204,8 @@
 				885DE67F17B54CCA0066BD9B /* CryptoProxy.m */,
 				885F848117B333B30083007A /* NSString+Parser.h */,
 				885F848217B333B30083007A /* NSString+Parser.m */,
+				88178A9818105C2400F73EA3 /* NSString+Trim.h */,
+				88178A9918105C2400F73EA3 /* NSString+Trim.m */,
 				8857C90B17B2DE4F0056A6F9 /* Base64 */,
 				8857C8E717B2DDD40056A6F9 /* Supporting Files */,
 			);
@@ -290,6 +297,7 @@
 				885DE68017B54CCA0066BD9B /* CryptoProxy.h in Headers */,
 				885DE69717B570B80066BD9B /* HawkAuth.h in Headers */,
 				885F848317B333B30083007A /* NSString+Parser.h in Headers */,
+				88178A9A18105C2400F73EA3 /* NSString+Trim.h in Headers */,
 				8857C91E17B2DE9F0056A6F9 /* HawkCredentials.h in Headers */,
 				885DE67617B411A20066BD9B /* HawkError.h in Headers */,
 				8857C91217B2DE4F0056A6F9 /* NSString+Base64.h in Headers */,
@@ -440,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				885F848417B333B30083007A /* NSString+Parser.m in Sources */,
+				88178A9B18105C2400F73EA3 /* NSString+Trim.m in Sources */,
 				8857C91317B2DE4F0056A6F9 /* NSString+Base64.m in Sources */,
 				8857C91117B2DE4F0056A6F9 /* NSData+Base64.m in Sources */,
 				885DE67717B411A20066BD9B /* HawkError.m in Sources */,
@@ -463,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				885F848517B333B30083007A /* NSString+Parser.m in Sources */,
+				88178A9C18105C2400F73EA3 /* NSString+Trim.m in Sources */,
 				885DE67817B411A20066BD9B /* HawkError.m in Sources */,
 				8857C97017B2E3230056A6F9 /* HawkCredentials.m in Sources */,
 				885DE69917B570B80066BD9B /* HawkAuth.m in Sources */,
