@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 @property (nonatomic) NSData *payload;
 @property (nonatomic) NSString *contentType;
 
-@property (nonatomic) NSString *hash;
+@property (nonatomic) NSString *digest;
 @property (nonatomic) NSString *hmac;
 
 #pragma mark -

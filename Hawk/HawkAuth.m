@@ -110,11 +110,11 @@
 {
     CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:self.credentials.algorithm];
 
-    NSData *hash = [cryptoProxy digestFromData:[[self normalizedPayloadString] dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData *digest = [cryptoProxy digestFromData:[[self normalizedPayloadString] dataUsingEncoding:NSUTF8StringEncoding]];
 
-    self.hash = [hash base64EncodedString];
+    self.digest = [digest base64EncodedString];
 
-    return self.hash;
+    return self.digest;
 }
 
 - (NSString *)hmacWithType:(HawkAuthType)type
