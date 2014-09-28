@@ -24,9 +24,9 @@
 
     NSMutableString *tmp = [NSMutableString stringWithString:self];
 
-    [leadingWhiteSpaceRegex replaceMatchesInString:tmp options:NSMatchingWithoutAnchoringBounds range:NSRangeFromString([NSString stringWithFormat:@"0,%d", [tmp length]]) withTemplate:@""];
+    [leadingWhiteSpaceRegex replaceMatchesInString:tmp options:NSMatchingWithoutAnchoringBounds range:NSRangeFromString([NSString stringWithFormat:@"0,%ld", [tmp length]]) withTemplate:@""];
 
-    [trailingWhiteSpaceRegex replaceMatchesInString:tmp options:NSMatchingWithoutAnchoringBounds range:NSRangeFromString([NSString stringWithFormat:@"0,%d", [tmp length]]) withTemplate:@""];
+    [trailingWhiteSpaceRegex replaceMatchesInString:tmp options:NSMatchingWithoutAnchoringBounds range:NSRangeFromString([NSString stringWithFormat:@"0,%ld", [tmp length]]) withTemplate:@""];
 
     return [NSString stringWithString:tmp];
 }

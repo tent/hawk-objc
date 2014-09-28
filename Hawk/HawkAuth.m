@@ -62,7 +62,7 @@
     [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
     // port
-    [normalizedString appendData:[[NSString stringWithFormat:@"%i\n", [self.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendData:[[NSString stringWithFormat:@"%ld\n", [self.port integerValue]] dataUsingEncoding:NSUTF8StringEncoding]];
 
     // hash
     if (self.payload) {
