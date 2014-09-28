@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Hawk"
-  s.version      = "0.1.5"
+  s.version      = "0.1.6"
   s.summary      = "Hawk authentication scheme."
   s.homepage     = "https://github.com/tent/hawk-objc"
 
