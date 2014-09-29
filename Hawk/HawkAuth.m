@@ -221,7 +221,7 @@
 
     NSString *partKey;
     NSString *partValue;
-    NSUInteger *splitIndex;
+    NSUInteger splitIndex;
     for (NSString *part in parts) {
 
         splitIndex = [part firstIndexOf:@"="];

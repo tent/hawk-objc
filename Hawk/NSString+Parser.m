@@ -11,15 +11,13 @@
 
 @implementation NSString (Parser)
 
-- (NSUInteger *)firstIndexOf:(NSString *)substring
+- (NSUInteger)firstIndexOf:(NSString *)substring
 {
-    for (int i=0; i<self.length; i++) {
-        if ([[[self substringFromIndex:i] substringToIndex:substring.length] isEqualToString:substring]) {
-            return (NSUInteger *)[[NSNumber numberWithInt:i] integerValue];
-        }
-    }
-
-    return nil;
+  NSRange range = [self rangeOfString:substring];
+  if (range.location != NSNotFound) {
+    return range.location;
+  }
+  return -1;
 }
 
 @end

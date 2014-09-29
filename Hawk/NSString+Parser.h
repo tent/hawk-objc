@@ -11,6 +11,6 @@
 
 @interface NSString (Parser)
 
-- (NSUInteger *)firstIndexOf:(NSString *)substring;
+- (NSUInteger)firstIndexOf:(NSString *)substring;
 
 @end
