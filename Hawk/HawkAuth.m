@@ -239,7 +239,6 @@
 
 - (HawkError *)validateRequestHeader:(NSString *)header
                    credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
-                         nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup
 {
     NSDictionary *headerAttributes = [self parseAuthorizationHeader:header];
 

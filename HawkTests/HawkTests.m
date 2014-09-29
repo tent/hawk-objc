@@ -177,8 +177,6 @@
         }
 
         return nil;
-    } nonceLookup:^BOOL(NSString *nonce) {
-        return NO;
     }];
 
     XCTAssert(!error);

@@ -77,10 +77,8 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 // Sets self.credentials if valid
 // self.nonce, self.timestamp, and self.app are set with values from header when valid hawk id
 // credentialsLookup(<hawk id>) block should return an instance of HawkCredentials or nil
-// nonceLookup(<nonce>) block should return YES if nonce has been used before or NO
 - (HawkError *)validateRequestHeader:(NSString *)header
-                   credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup
-                         nonceLookup:(BOOL (^)(NSString *nonce))nonceLookup;
+                   credentialsLookup:(HawkCredentials *(^)(NSString *hawkId))credentialsLookup;
 
 - (HawkError *)validateResponseHeader:(NSString *)header;
 
