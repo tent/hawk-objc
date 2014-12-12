@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Hawk"
-  s.version      = "0.1.7"
+  s.version      = "0.1.8"
   s.summary      = "Hawk authentication scheme."
   s.homepage     = "https://github.com/tent/hawk-objc"
 
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
   s.author       = { "Jesse Stuart" => "jesse@jessestuart.ca" }
 
-  s.source       = { :git => "https://github.com/tent/hawk-objc.git", :tag => "v0.1.7" }
+  s.source       = { :git => "https://github.com/tent/hawk-objc.git", :tag => "v0.1.8" }
 
   s.ios.deployment_target = '7.0'
   s.osx.deployment_target = '10.8'
