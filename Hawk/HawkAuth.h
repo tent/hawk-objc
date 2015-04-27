@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 @property (nonatomic) NSString *ext;
 
 @property (nonatomic) NSString *app;
-@property (nonatomic) NSString *dig;
+@property (nonatomic) NSString *dlg;
 
 @property (nonatomic) NSData *payload;
 @property (nonatomic) NSString *contentType;

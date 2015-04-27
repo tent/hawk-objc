@@ -78,12 +78,13 @@
 
     // app
     if (self.app) {
-        if (!self.dig) {
-            self.dig = @"";
+        NSString *dlg = self.dlg;
+        if (!dlg) {
+            dlg = @"";
         }
 
         [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", self.app] dataUsingEncoding:NSUTF8StringEncoding]];
-        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", self.dig] dataUsingEncoding:NSUTF8StringEncoding]];
+        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", dlg] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
     return [[NSString alloc] initWithData:normalizedString encoding:NSUTF8StringEncoding];
@@ -187,6 +188,16 @@
         [header appendData:[[NSString stringWithFormat:@", app=\"%@\"", self.app] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
+    // ext
+    if (self.ext) {
+        [header appendData:[[NSString stringWithFormat:@", ext=\"%@\"", self.ext] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    // dlg
+    if (self.dlg) {
+        [header appendData:[[NSString stringWithFormat:@", dlg=\"%@\"", self.dlg] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
     return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
 }
 
@@ -233,7 +244,7 @@
 
         [attributes setObject:partValue forKey:partKey];
     }
-    
+
     return [NSDictionary dictionaryWithDictionary:attributes];
 }
 
