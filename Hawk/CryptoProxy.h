@@ -9,10 +9,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <CommonCrypto/CommonDigest.h>
-#import <CommonCrypto/CommonHMAC.h>
-#import <CommonCrypto/CommonCryptor.h>
-
 typedef NS_ENUM(NSUInteger, CryptoAlgorithm) {
     CryptoAlgorithmSHA1,
     CryptoAlgorithmSHA224,
