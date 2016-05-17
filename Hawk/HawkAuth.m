@@ -11,7 +11,6 @@
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 #import "NSString+Parser.h"
-#import "NSString+Trim.h"
 
 @implementation HawkAuth
 
@@ -96,7 +95,8 @@
 
     [normalizedString appendData:[@"hawk.1.payload\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
-    NSString *contentType = [[[self.contentType componentsSeparatedByString:@";"] objectAtIndex:0] stringByTrimmingLeadingAndTrailingWhitespace];
+    NSString *contentType = [[[self.contentType componentsSeparatedByString:@";"] objectAtIndex:0]
+                             stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
     [normalizedString appendData:[contentType dataUsingEncoding:NSUTF8StringEncoding]];
     [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
