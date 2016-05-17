@@ -10,7 +10,6 @@
 #import "HawkAuth.h"
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
-#import "NSString+Parser.h"
 
 @implementation HawkAuth
 
@@ -77,10 +76,7 @@
 
     // app
     if (self.app) {
-        NSString *dlg = self.dlg;
-        if (!dlg) {
-            dlg = @"";
-        }
+        NSString *dlg = self.dlg ?: @"";
 
         [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", self.app] dataUsingEncoding:NSUTF8StringEncoding]];
         [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", dlg] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -228,21 +224,31 @@
 {
     NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
 
-    NSArray *parts = [[header substringFromIndex:(int)[header firstIndexOf:@"Hawk "] + 5] componentsSeparatedByString:@", "];
+    // if this is not a hawk auth header, return an empty dictionary
+    NSRange range = [header rangeOfString:@"Hawk "];
+    if(range.location == NSNotFound) {
+        return [NSDictionary dictionary];
+    }
+    
+    NSString *attribString = [header substringFromIndex:range.location + range.length];
+    NSArray *parts = [attribString componentsSeparatedByString:@","];
 
-    NSString *partKey;
-    NSString *partValue;
-    NSUInteger splitIndex;
+    NSString *key, *val;
     for (NSString *part in parts) {
-
-        splitIndex = [part firstIndexOf:@"="];
-
-        partKey = [part substringToIndex:(int)splitIndex];
-
-        partValue = [part substringFromIndex:(int)splitIndex + 2]; // remove key="
-        partValue = [partValue substringToIndex:partValue.length - 1]; // remove trailing "
-
-        [attributes setObject:partValue forKey:partKey];
+        
+        @try {
+            NSUInteger delimIndex = [part rangeOfString:@"="].location;
+            key = [part substringToIndex:delimIndex];
+            val = [part substringFromIndex:delimIndex + 1];
+            
+            key = [key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            val = [val stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\\\""]];
+            
+            [attributes setValue:val forKey:key];
+            
+        } @catch (NSException *exception) {
+            continue; // if we get an out-of-bounds exception, try the next pair.
+        }
     }
 
     return [NSDictionary dictionaryWithDictionary:attributes];
