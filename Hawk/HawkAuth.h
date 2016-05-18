@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 @property (nonatomic) NSString *method;
 @property (nonatomic) NSString *requestUri;
 @property (nonatomic) NSString *host;
-@property (nonatomic) NSNumber *port;
+@property (nonatomic) NSUInteger port;
 
 @property (nonatomic) NSDate *timestamp;
 @property (nonatomic) NSString *nonce;
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 @property (nonatomic) NSString *app;
 @property (nonatomic) NSString *dlg;
 
-@property (nonatomic) NSData *payload;
+@property (nonatomic) NSString *payload;
 @property (nonatomic) NSString *contentType;
 
 @property (nonatomic) NSString *digest;
@@ -59,8 +59,6 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 - (NSString *)timestampSkewHmac;
 
 - (NSString *)bewit;
-
-- (NSString*) payloadString;
 
 #pragma mark -
 

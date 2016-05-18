@@ -18,11 +18,6 @@
     return [CryptoProxy cryptoProxyWithAlgorithm:self.credentials.algorithm];
 }
 
-- (NSString*)payloadString
-{
-    return [[NSString alloc] initWithData:_payload encoding:NSUTF8StringEncoding];
-}
-
 - (NSString *)normalizedStringWithType:(HawkAuthType)type
 {
     NSMutableString* normalizedString = [NSMutableString string];
@@ -59,7 +54,7 @@
     [normalizedString appendFormat:@"%@\n",self.host];
     
     // port
-    [normalizedString appendFormat:@"%tu\n",[self.port longValue]];
+    [normalizedString appendFormat:@"%tu\n",self.port];
 
     // hash
     [normalizedString appendFormat:@"%@\n",([self payloadHash] ?: @"")];
@@ -90,7 +85,7 @@
     [normalizedString appendFormat:@"%@\n",(contentType ?: @"")];
 
     // payload
-    [normalizedString appendFormat:@"%@\n",(self.payloadString ?: @"")];
+    [normalizedString appendFormat:@"%@\n",(self.payload ?: @"")];
 
     return [NSString stringWithString:normalizedString];
 }

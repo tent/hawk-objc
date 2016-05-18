@@ -29,8 +29,8 @@
     auth.method = @"POST";
     auth.requestUri = @"/posts";
     auth.host = @"example.com";
-    auth.port = [[NSNumber alloc] initWithInt:443];
-    auth.payload = [@"{\"type\":\"https://tent.io/types/status/v0#\"}" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.port = 443;
+    auth.payload = @"{\"type\":\"https://tent.io/types/status/v0#\"}";
 }
 
 - (void)tearDown
@@ -108,7 +108,7 @@
 
     auth.method = @"GET";
     auth.requestUri = @"/resource/4?a=1&b=2";
-    auth.port = [NSNumber numberWithInt:80];
+    auth.port = 80;
     auth.host = @"example.com";
     auth.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
     auth.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];

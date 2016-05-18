@@ -32,7 +32,7 @@
     HawkAuth *auth = [[HawkAuth alloc] init];
     auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
     auth.contentType = @"";
-    auth.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.payload = @"something to write about";
 
     NSString *expectedHash;
     NSString *actualHash;
@@ -58,7 +58,7 @@
     HawkAuth *auth = [[HawkAuth alloc] init];
     auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"" withKey:@"" withAlgorithm:CryptoAlgorithmSHA256];
     auth.contentType = @"text/plain; type=\"something\"";
-    auth.payload = [@"Something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.payload = @"Something to write about";
 
     NSString *expectedHash;
     NSString *actualHash;
@@ -84,7 +84,7 @@
     HawkAuth *auth = [[HawkAuth alloc] init];
     auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"" withKey:@"" withAlgorithm:CryptoAlgorithmSHA256];
     auth.contentType = @" text/plain ; type=\"something\"";
-    auth.payload = [@"Something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.payload = @"Something to write about";
 
     NSString *expectedHash;
     NSString *actualHash;
@@ -112,7 +112,7 @@
     auth.method = @"GET";
     auth.requestUri = @"/resource/4?a=1&b=2";
     auth.host = @"example.com";
-    auth.port = [NSNumber numberWithInt:80];
+    auth.port = 80;
     auth.ext = @"some-app-data";
 
     NSString *expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
@@ -131,8 +131,8 @@
     auth.method = @"POST";
     auth.requestUri = @"/somewhere/over/the/rainbow";
     auth.host = @"example.net";
-    auth.port = [NSNumber numberWithInt:80];
-    auth.payload = [@"something to write about" dataUsingEncoding:NSUTF8StringEncoding];
+    auth.port = 80;
+    auth.payload = @"something to write about";
     auth.ext = @"Bazinga!";
     auth.nonce = @"Ygvqdz";
 
