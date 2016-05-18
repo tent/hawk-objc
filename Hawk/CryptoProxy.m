@@ -11,6 +11,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import <CommonCrypto/CommonCryptor.h>
+#import "NSString+Base64.h"
+#import "NSData+Base64.h"
 
 @implementation CryptoProxy
 
@@ -188,5 +190,18 @@
 
     return output;
 }
+
+- (NSString *)digestFromString:(NSString *)input
+{
+    NSData* dataString = [self digestFromData:[input dataUsingEncoding:NSUTF8StringEncoding]];
+    return [dataString base64EncodedString];
+}
+
+- (NSString *)hmacFromString:(NSString *)input withKey:(NSString *)key
+{
+    NSData* dataString = [self hmacFromData:[input dataUsingEncoding:NSUTF8StringEncoding] withKey:key];
+    return [dataString base64EncodedString];
+}
+
 
 @end

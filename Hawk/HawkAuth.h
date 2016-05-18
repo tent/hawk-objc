@@ -60,6 +60,8 @@ typedef NS_ENUM(NSUInteger, HawkAuthType) {
 
 - (NSString *)bewit;
 
+- (NSString*) payloadString;
+
 #pragma mark -
 
 - (NSString *)requestHeader;

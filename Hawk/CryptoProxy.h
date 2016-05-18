@@ -50,7 +50,10 @@ typedef NS_ENUM(NSUInteger, CryptoAlgorithm) {
 #pragma mark -
 
 - (NSData *)digestFromData:(NSData *)input;
-
 - (NSData *)hmacFromData:(NSData *)input withKey:(NSString *)key;
+
+- (NSString *)digestFromString:(NSString *)input;
+- (NSString *)hmacFromString:(NSString *)input withKey:(NSString *)key;
+
 
 @end
