@@ -8,7 +8,6 @@
 //
 
 #import "HawkAuth.h"
-#import "NSData+Base64.h"
 #import "NSString+Base64.h"
 
 @implementation HawkAuth
@@ -124,9 +123,11 @@
         self.ext = @"";
     }
 
-    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", self.credentials.hawkId, [self.timestamp timeIntervalSince1970], hmac, self.ext];
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", self.credentials.hawkId,
+                                  [self.timestamp timeIntervalSince1970], hmac, self.ext];
 
-    NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
+    NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:
+                       [NSCharacterSet characterSetWithCharactersInString:@"="]];
 
     bewit = [bewit stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
     bewit = [bewit stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
@@ -193,7 +194,8 @@
 - (NSString *)timestampSkewHeader
 {
     NSString *tsm = [self timestampSkewHmac];
-    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%.0f\", tsm=\"%@\", error=\"timestamp skew too high\"", [self.timestamp timeIntervalSince1970], tsm];
+    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%.0f\", tsm=\"%@\", error=\"timestamp skew too high\"",
+                        [self.timestamp timeIntervalSince1970], tsm];
 
     return header;
 }
@@ -259,7 +261,8 @@
 
     self.nonce = [headerAttributes objectForKey:@"nonce"];
 
-    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[[[NSNumberFormatter alloc] numberFromString:[headerAttributes objectForKey:@"ts"]] doubleValue]];
+    NSNumber* since1970 = [[NSNumberFormatter alloc] numberFromString:[headerAttributes objectForKey:@"ts"]];
+    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[since1970 doubleValue]];
 
     self.app = [headerAttributes objectForKey:@"app"];
 
@@ -346,8 +349,9 @@
     // set attributes
 
     self.credentials = credentials;
-
-    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[[[NSNumberFormatter alloc] numberFromString:[parts objectAtIndex:1]] doubleValue]];
+    
+    NSNumber* since1970 = [[NSNumberFormatter alloc] numberFromString:[parts objectAtIndex:1]];
+    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[since1970 doubleValue]];
 
     self.ext = [parts objectAtIndex:3];
 

@@ -32,7 +32,6 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-#import "NSData+Base64.h"
 #import "NSString+Base64.h"
 
 #import <Availability.h>
@@ -42,36 +41,16 @@
 
 @implementation NSString (Base64)
 
-+ (NSString *)stringWithBase64EncodedString:(NSString *)string
-{
-    NSData *data = [NSData dataWithBase64EncodedString:string];
-    if (data)
-    {
-        return [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    }
-    return nil;
-}
-
-- (NSString *)base64EncodedStringWithWrapWidth:(NSUInteger)wrapWidth
-{
-    NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    return [data base64EncodedStringWithWrapWidth:wrapWidth];
-}
-
 - (NSString *)base64EncodedString
 {
     NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    return [data base64EncodedString];
+    return [data base64EncodedStringWithOptions:0];
 }
 
 - (NSString *)base64DecodedString
 {
-    return [NSString stringWithBase64EncodedString:self];
-}
-
-- (NSData *)base64DecodedData
-{
-    return [NSData dataWithBase64EncodedString:self];
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:self options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    return  data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
 }
 
 @end

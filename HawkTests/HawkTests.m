@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "HawkAuth.h"
-#import "NSData+Base64.h"
+#import "NSString+Base64.h"
 
 @interface HawkTests : XCTestCase
 {
@@ -110,7 +110,7 @@
     auth.requestUri = @"/resource/4?a=1&b=2";
     auth.port = 80;
     auth.host = @"example.com";
-    auth.ext = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:@"76u/77yw44Sy\n"] encoding:NSUTF8StringEncoding];
+    auth.ext = [@"76u/77yw44Sy\n" base64DecodedString];
     auth.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
 
     bewit = [auth bewit];
