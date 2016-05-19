@@ -8,10 +8,7 @@
 //
 
 #import "HawkAuth.h"
-#import "NSData+Base64.h"
 #import "NSString+Base64.h"
-#import "NSString+Parser.h"
-#import "NSString+Trim.h"
 
 @implementation HawkAuth
 
@@ -22,7 +19,7 @@
 
 - (NSString *)normalizedStringWithType:(HawkAuthType)type
 {
-    NSMutableData *normalizedString = [[NSMutableData alloc] init];
+    NSMutableString* normalizedString = [NSMutableString string];
 
     NSString *hawkType;
     switch (type) {
@@ -38,108 +35,84 @@
     }
 
     // header
-    [normalizedString appendData:[[NSString stringWithFormat:@"hawk.1.%@\n", hawkType] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"hawk.1.%@\n", hawkType];
 
     // timestamp
-    [normalizedString appendData:[[NSString stringWithFormat:@"%.0f\n", [self.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%.0f\n", [self.timestamp timeIntervalSince1970]];
 
     // nonce
-    if (self.nonce) {
-        [normalizedString appendData:[self.nonce dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%@\n",(self.nonce ?: @"")];
 
     // method
-    [normalizedString appendData:[self.method dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%@\n",self.method];
 
     // request uri
-    [normalizedString appendData:[self.requestUri dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%@\n",self.requestUri];
 
     // host
-    [normalizedString appendData:[self.host dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
+    [normalizedString appendFormat:@"%@\n",self.host];
+    
     // port
-    [normalizedString appendData:[[NSString stringWithFormat:@"%ld\n", [self.port longValue]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%tu\n",self.port];
 
     // hash
-    if (self.payload) {
-        [normalizedString appendData:[[self payloadHash] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%@\n",([self payloadHash] ?: @"")];
 
     // ext
-    if (self.ext) {
-        [normalizedString appendData:[self.ext dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [normalizedString appendFormat:@"%@\n",(self.ext ?: @"")];
 
     // app
-    if (self.app) {
-        NSString *dlg = self.dlg;
-        if (!dlg) {
-            dlg = @"";
-        }
-
-        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", self.app] dataUsingEncoding:NSUTF8StringEncoding]];
-        [normalizedString appendData:[[NSString stringWithFormat:@"%@\n", dlg] dataUsingEncoding:NSUTF8StringEncoding]];
+    if(self.app) {
+        [normalizedString appendFormat:@"%@\n",(self.app ?: @"")];
+        [normalizedString appendFormat:@"%@\n",(self.dlg ?: @"")];
     }
 
-    return [[NSString alloc] initWithData:normalizedString encoding:NSUTF8StringEncoding];
+    return [NSString stringWithString:normalizedString];
 }
 
 - (NSString *)normalizedPayloadString
 {
-    NSMutableData *normalizedString = [[NSMutableData alloc] init];
+    NSMutableString* normalizedString = [NSMutableString string];
 
-    [normalizedString appendData:[@"hawk.1.payload\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    // static type-string
+    [normalizedString appendString:@"hawk.1.payload\n"];
 
-    NSString *contentType = [[[self.contentType componentsSeparatedByString:@";"] objectAtIndex:0] stringByTrimmingLeadingAndTrailingWhitespace];
+    // content type
+    NSArray *contentTypeSplit = [self.contentType componentsSeparatedByString:@";"];
+    NSString *contentType = [[contentTypeSplit firstObject] // bounds-safe, defaults to nil
+                             stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [normalizedString appendFormat:@"%@\n",(contentType ?: @"")];
 
-    [normalizedString appendData:[contentType dataUsingEncoding:NSUTF8StringEncoding]];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    // payload
+    [normalizedString appendFormat:@"%@\n",(self.payload ?: @"")];
 
-    [normalizedString appendData:self.payload];
-    [normalizedString appendData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
-    return [[NSString alloc] initWithData:normalizedString encoding:NSUTF8StringEncoding];
+    return [NSString stringWithString:normalizedString];
 }
 
 - (NSString *)payloadHash
 {
-    CryptoProxy *cryptoProxy = [CryptoProxy cryptoProxyWithAlgorithm:self.credentials.algorithm];
-
-    NSData *digest = [cryptoProxy digestFromData:[[self normalizedPayloadString] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    self.digest = [digest base64EncodedString];
-
+    self.digest = self.payload ? [self.cryptoProxy digestFromString:[self normalizedPayloadString]]
+                               : nil;
+    
     return self.digest;
 }
 
 - (NSString *)hmacWithType:(HawkAuthType)type
 {
-    NSData *normalizedString = [[self normalizedStringWithType:type] dataUsingEncoding:NSUTF8StringEncoding];
-
-    CryptoProxy *cryptoProxy = [self cryptoProxy];
-
-    NSData *hmac = [cryptoProxy hmacFromData:normalizedString withKey:self.credentials.key];
-
-    self.hmac = [hmac base64EncodedString];
-
+    self.hmac = [self.cryptoProxy hmacFromString:[self normalizedStringWithType:type]
+                                         withKey:self.credentials.key];
+    
     return self.hmac;
 }
 
 - (NSString *)timestampSkewHmac
 {
-    NSString *normalizedString = [NSString stringWithFormat:@"hawk.1.ts\n%.0f\n", [self.timestamp timeIntervalSince1970]];
+    NSTimeInterval timeStamp = [self.timestamp timeIntervalSince1970];
+    NSString *normalizedString = [NSString stringWithFormat:@"hawk.1.ts\n%.0f\n", timeStamp];
 
-    CryptoProxy *cryptoProxy = [self cryptoProxy];
+    NSString *hmac = [self.cryptoProxy hmacFromString:normalizedString withKey:self.credentials.key];
 
-    NSData *hmac = [cryptoProxy hmacFromData:[normalizedString dataUsingEncoding:NSUTF8StringEncoding] withKey:self.credentials.key];
-
-    return [hmac base64EncodedString];
+    return hmac;
 }
 
 - (NSString *)bewit
@@ -150,9 +123,11 @@
         self.ext = @"";
     }
 
-    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", self.credentials.hawkId, [self.timestamp timeIntervalSince1970], hmac, self.ext];
+    NSString *normalizedString = [NSString stringWithFormat:@"%@\\%.0f\\%@\\%@", self.credentials.hawkId,
+                                  [self.timestamp timeIntervalSince1970], hmac, self.ext];
 
-    NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
+    NSString *bewit = [[normalizedString base64EncodedString] stringByTrimmingCharactersInSet:
+                       [NSCharacterSet characterSetWithCharactersInString:@"="]];
 
     bewit = [bewit stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
     bewit = [bewit stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
@@ -164,60 +139,63 @@
 
 - (NSString *)requestHeader
 {
-    NSMutableData *header = [[NSMutableData alloc] init];
+    NSMutableString* header = [NSMutableString string];
 
     // id
-    [header appendData:[[NSString stringWithFormat:@"Authorization: Hawk id=\"%@\"", self.credentials.hawkId] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendString:[NSString stringWithFormat:@"Authorization: Hawk id=\"%@\"", self.credentials.hawkId]];
 
     // mac
-    [header appendData:[[NSString stringWithFormat:@", mac=\"%@\"", [self hmacWithType:HawkAuthTypeHeader]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendString:[NSString stringWithFormat:@", mac=\"%@\"", [self hmacWithType:HawkAuthTypeHeader]]];
 
     // timestamp
-    [header appendData:[[NSString stringWithFormat:@", ts=\"%.0f\"", [self.timestamp timeIntervalSince1970]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendString:[NSString stringWithFormat:@", ts=\"%.0f\"", [self.timestamp timeIntervalSince1970]]];
 
     // nonce
-    [header appendData:[[NSString stringWithFormat:@", nonce=\"%@\"", self.nonce] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendString:[NSString stringWithFormat:@", nonce=\"%@\"", self.nonce]];
 
     // hash
     if (self.payload) {
-        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHash]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendString:[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHash]]];
     }
 
     // app
     if (self.app) {
-        [header appendData:[[NSString stringWithFormat:@", app=\"%@\"", self.app] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendString:[NSString stringWithFormat:@", app=\"%@\"", self.app]];
     }
 
     // ext
     if (self.ext) {
-        [header appendData:[[NSString stringWithFormat:@", ext=\"%@\"", self.ext] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendString:[NSString stringWithFormat:@", ext=\"%@\"", self.ext]];
     }
 
     // dlg
     if (self.dlg) {
-        [header appendData:[[NSString stringWithFormat:@", dlg=\"%@\"", self.dlg] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendString:[NSString stringWithFormat:@", dlg=\"%@\"", self.dlg]];
     }
 
-    return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
+    return [NSString stringWithString:header];
 }
 
 - (NSString *)responseHeader
 {
+    NSMutableString* header = [NSMutableString string];
+    
     // mac
-    NSMutableData *header = [[NSMutableData alloc] initWithData:[[NSString stringWithFormat:@"Server-Authorization: Hawk mac=\"%@\"", [self hmacWithType:HawkAuthTypeResponse]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [header appendFormat:@"Server-Authorization: Hawk mac=\"%@\"", [self hmacWithType:HawkAuthTypeResponse]];
 
     // hash
     if (self.payload) {
-        [header appendData:[[NSString stringWithFormat:@", hash=\"%@\"", [self payloadHash]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [header appendFormat:@", hash=\"%@\"", [self payloadHash]];
     }
 
-    return [[NSString alloc] initWithData:header encoding:NSUTF8StringEncoding];
+    return [NSString stringWithString:header];
 }
 
 - (NSString *)timestampSkewHeader
 {
     NSString *tsm = [self timestampSkewHmac];
-    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%.0f\", tsm=\"%@\", error=\"timestamp skew too high\"", [self.timestamp timeIntervalSince1970], tsm];
+    NSString *header = [NSString stringWithFormat:@"WWW-Authenticate: Hawk ts=\"%.0f\", tsm=\"%@\", error=\"timestamp skew too high\"",
+                        [self.timestamp timeIntervalSince1970], tsm];
 
     return header;
 }
@@ -228,21 +206,31 @@
 {
     NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
 
-    NSArray *parts = [[header substringFromIndex:(int)[header firstIndexOf:@"Hawk "] + 5] componentsSeparatedByString:@", "];
+    // if this is not a hawk auth header, return an empty dictionary
+    NSRange range = [header rangeOfString:@"Hawk "];
+    if(range.location == NSNotFound) {
+        return [NSDictionary dictionary];
+    }
+    
+    NSString *attribString = [header substringFromIndex:range.location + range.length];
+    NSArray *parts = [attribString componentsSeparatedByString:@","];
 
-    NSString *partKey;
-    NSString *partValue;
-    NSUInteger splitIndex;
+    NSString *key, *val;
     for (NSString *part in parts) {
-
-        splitIndex = [part firstIndexOf:@"="];
-
-        partKey = [part substringToIndex:(int)splitIndex];
-
-        partValue = [part substringFromIndex:(int)splitIndex + 2]; // remove key="
-        partValue = [partValue substringToIndex:partValue.length - 1]; // remove trailing "
-
-        [attributes setObject:partValue forKey:partKey];
+        
+        @try {
+            NSUInteger delimIndex = [part rangeOfString:@"="].location;
+            key = [part substringToIndex:delimIndex];
+            val = [part substringFromIndex:delimIndex + 1];
+            
+            key = [key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            val = [val stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\\\""]];
+            
+            [attributes setValue:val forKey:key];
+            
+        } @catch (NSException *exception) {
+            continue; // if we get an out-of-bounds exception, try the next pair.
+        }
     }
 
     return [NSDictionary dictionaryWithDictionary:attributes];
@@ -273,7 +261,8 @@
 
     self.nonce = [headerAttributes objectForKey:@"nonce"];
 
-    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[[[NSNumberFormatter alloc] numberFromString:[headerAttributes objectForKey:@"ts"]] doubleValue]];
+    NSNumber* since1970 = [[NSNumberFormatter alloc] numberFromString:[headerAttributes objectForKey:@"ts"]];
+    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[since1970 doubleValue]];
 
     self.app = [headerAttributes objectForKey:@"app"];
 
@@ -360,8 +349,9 @@
     // set attributes
 
     self.credentials = credentials;
-
-    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[[[NSNumberFormatter alloc] numberFromString:[parts objectAtIndex:1]] doubleValue]];
+    
+    NSNumber* since1970 = [[NSNumberFormatter alloc] numberFromString:[parts objectAtIndex:1]];
+    self.timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[since1970 doubleValue]];
 
     self.ext = [parts objectAtIndex:3];
 
