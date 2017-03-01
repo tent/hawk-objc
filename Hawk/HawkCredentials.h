@@ -12,10 +12,20 @@
 
 @interface HawkCredentials : NSObject
 
-@property (copy) NSString *hawkId;
-@property (copy) NSString *key;
-@property (nonatomic) CryptoAlgorithm algorithm;
+/*
+ http://stackoverflow.com/questions/9859719/objective-c-declared-property-attributes-nonatomic-copy-strong-weak
+ */
+@property (readonly, strong, nonatomic) NSString *keyId;
+@property (readonly, strong, nonatomic) NSString *key;
+@property (readonly, nonatomic) CryptoAlgorithm algorithm;
 
-- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(CryptoAlgorithm)algorithm;
++ (instancetype)withKeyId:(NSString *)hawkId
+                      key:(NSString *)key
+                algorithm:(CryptoAlgorithm)algorithm;
+
+/*
+ @return A copy of the original credentials with the algorithm replaced
+ */
+- (instancetype)copyWithAlgorithm:(CryptoAlgorithm)algorithm;
 
 @end

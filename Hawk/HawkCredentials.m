@@ -11,15 +11,29 @@
 
 @implementation HawkCredentials
 
-- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(CryptoAlgorithm)algorithm
-{
-    self = [super init];
+- (id)initWithKeyId:(NSString *)keyId
+                 key:(NSString *)key
+           algorithm:(CryptoAlgorithm)algorithm {
+        if (self = [super init]) {
+                _algorithm = algorithm;
+                _keyId = keyId;
+                _key = key;
+        }
+        return self;
+}
 
-    self.hawkId = hawkId;
-    self.key = key;
-    self.algorithm = algorithm;
++ (instancetype)withKeyId:(NSString *)keyId
+                   key:(NSString *)key
+                 algorithm:(CryptoAlgorithm)algorithm {
+        return [[self alloc] initWithKeyId:keyId
+                                       key:key
+                                 algorithm:algorithm];
+}
 
-    return self;
+- (instancetype)copyWithAlgorithm:(CryptoAlgorithm)algorithm {
+        return [HawkCredentials withKeyId:_keyId
+                                      key:_key
+                                algorithm:algorithm];
 }
 
 @end
