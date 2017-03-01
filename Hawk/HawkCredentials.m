@@ -36,4 +36,11 @@
                                 algorithm:algorithm];
 }
 
+- (NSString *)description {
+        return [NSString stringWithFormat:@"%@:%@ {%@}",
+                _keyId,
+                _key,
+                [CryptoProxy algorithmToString:_algorithm]];
+}
+
 @end

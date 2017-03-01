@@ -25,10 +25,12 @@
         HawkCredentials *creds = [HawkCredentials withKeyId:@"exqbZWtykFZIh2D7cXi9dA"
                                                         key:@"HX9QcbD-r3ItFEnRcAuOSg"
                                                   algorithm:kCryptoAlgorithmSHA256];
-        self.builder = [[[[[HawkAuthBuilder withCredentials:creds]
-                           withContentType:@"application/vnd.tent.post.v0+json"]
-                          usingPOST]
-                         withURLString:@"example.com:443/posts"]
+        self.builder = [[[[[[[HawkAuthBuilder withCredentials:creds]
+                             withContentType:@"application/vnd.tent.post.v0+json"]
+                            usingPOST]
+                           withHost:@"example.com"]
+                          withPort:@(443)]
+                         withResourcePath:@"/posts"]
                         withPayload:@"{\"type\":\"https://tent.io/types/status/v0#\"}"];
         
         self.auth = [self.builder build];
@@ -37,6 +39,22 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+- (void)testEqualUrlsDifferentFormats {
+        [[[self.builder withHost:@"example.com"]
+          withPort:@(443)]
+         withResourcePath:@"/posts?foo=bar&bar=dog"];
+        NSString *hmac1 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        [self.builder withURLString:@"//example.com:443/posts?foo=bar&bar=dog"];
+        NSString *hmac2 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        [self.builder withURL:[NSURL URLWithString:@"//example.com:443/posts?foo=bar&bar=dog"]];
+        NSString *hmac3 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        XCTAssertEqualObjects(hmac1, hmac2);
+        XCTAssertEqualObjects(hmac2, hmac3);
 }
 
 - (void)testPayloadHash {
@@ -111,7 +129,7 @@
 
         self.auth = [[[[[[self.builder withCredentials:credentials]
                          usingGET]
-                        withURLString:@"example.com:80/resource/4?a=1&b=2"]
+                        withURLString:@"//example.com:80/resource/4?a=1&b=2"]
                        withExt:[@"76u/77yw44Sy\n" base64DecodedString]]
                       withTimestamp:[NSDate dateWithTimeIntervalSince1970:4519311458]]
                      build];

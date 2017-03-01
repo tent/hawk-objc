@@ -103,11 +103,13 @@
 }
 
 - (void)testBewit {
-        self.builder = [[[[[[HawkAuthBuilder withCredentials:self.creds]
-                            switchAlgorithm:kCryptoAlgorithmSHA256]
-                           withTimestamp:[NSDate dateWithTimeIntervalSince1970:4519311458]]
-                          usingGET]
-                         withURLString:@"example.com:80/resource/4?a=1&b=2"]
+        self.builder = [[[[[[[[HawkAuthBuilder withCredentials:self.creds]
+                              switchAlgorithm:kCryptoAlgorithmSHA256]
+                             withTimestamp:[NSDate dateWithTimeIntervalSince1970:4519311458]]
+                            usingGET]
+                           withHost:@"example.com"]
+                          withPort:@(80)]
+                         withResourcePath:@"/resource/4?a=1&b=2"]
                         withExt:@"some-app-data"];
 
     NSString *expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcYkkwanFlS1prUHE0V1hRMmkxK0NrQ2lOanZEc3BSVkNGajlmbElqMXphWT1cc29tZS1hcHAtZGF0YQ";
@@ -117,11 +119,13 @@
 }
 
 - (void)testMac {
-    self.builder = [[[[[[[[HawkAuthBuilder withCredentials:self.creds]
-                          withTimestamp:[NSDate dateWithTimeIntervalSince1970:1353809207]]
-                         usingContentType:kContentTypeEmpty]
-                        usingPOST]
-                       withURLString:@"example.net:80/somewhere/over/the/rainbow"]
+    self.builder = [[[[[[[[[[HawkAuthBuilder withCredentials:self.creds]
+                            withTimestamp:[NSDate dateWithTimeIntervalSince1970:1353809207]]
+                           usingContentType:kContentTypeEmpty]
+                          usingPOST]
+                         withHost:@"example.net"]
+                        withPort:@(80)]
+                       withResourcePath:@"/somewhere/over/the/rainbow"]
                       withExt:@"Bazinga!"]
                      withPayload:@"something to write about"]
                     withNonce:@"Ygvqdz"];

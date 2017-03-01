@@ -16,8 +16,7 @@ typedef HawkCredentials *(^CredentialsLookupBlock)(NSString *keyId);
 typedef NS_ENUM(NSUInteger, HawkAuthType) {
         kHawkAuthTypeHeader,
         kHawkAuthTypeResponse,
-        kHawkAuthTypeBewit,
-        kHawkAuthTypePayload
+        kHawkAuthTypeBewit
 };
 
 const static NSString *kHawkHeaderVersion = @"1";
@@ -42,17 +41,18 @@ const static NSString *kHawkHeaderVersion = @"1";
 
 #pragma mark - Properties
 
-@property (nonatomic, readonly) HawkCredentials *credentials;
-@property (nonatomic, readonly) CryptoAlgorithm algorithm;
-@property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSString *nonce;
-@property (nonatomic, readonly) NSString *ext;
 @property (nonatomic, readonly) NSString *app;
-@property (nonatomic, readonly) NSString *dlg;
-@property (nonatomic, readonly) NSString *payload;
 @property (nonatomic, readonly) NSString *contentType;
+@property (nonatomic, readonly) HawkCredentials *credentials;
+@property (nonatomic, readonly) NSString *dlg;
+@property (nonatomic, readonly) NSString *ext;
+@property (nonatomic, readonly) NSString *host;
+@property (nonatomic, readonly) NSString *method;
+@property (nonatomic, readonly) NSString *nonce;
+@property (nonatomic, readonly) NSString *payload;
+@property (nonatomic, readonly) NSNumber *port;
+@property (nonatomic, readonly) NSString *resourcePath;
+@property (nonatomic, readonly) NSDate *timestamp;
 
 #pragma mark - ?
 
@@ -181,6 +181,9 @@ typedef NS_ENUM(int, ContentType) {
 - (instancetype)withTimestamp:(NSDate *)timestamp;
 - (instancetype)withURL:(NSURL *)url;
 - (instancetype)withURLString:(NSString *)urlString;
+- (instancetype)withHost:(NSString *)host;
+- (instancetype)withPort:(NSNumber *)port;
+- (instancetype)withResourcePath:(NSString *)resourcePath;
 
 /*
  Convenience method for replacing the current credentials with a copy 

@@ -21,6 +21,8 @@ typedef NS_ENUM(NSUInteger, CryptoAlgorithm) {
 
 @property (nonatomic) CryptoAlgorithm algorithm;
 
++ (NSString *)algorithmToString:(CryptoAlgorithm)algorithm;
+
 + (CryptoProxy *)cryptoProxyWithAlgorithm:(CryptoAlgorithm)algorithm;
 
 #pragma mark - Creating Digests

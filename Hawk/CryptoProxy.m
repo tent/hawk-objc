@@ -15,12 +15,35 @@
 
 @implementation CryptoProxy
 
+
++ (NSString *)algorithmToString:(CryptoAlgorithm)algorithm {
+        switch (algorithm) {
+                case kCryptoAlgorithmSHA1:
+                        return @"SHA1";
+                case kCryptoAlgorithmSHA224:
+                        return @"SHA224";
+                case kCryptoAlgorithmSHA256:
+                        return @"SHA256";
+                case kCryptoAlgorithmSHA384:
+                        return @"SHA384";
+                case kCryptoAlgorithmSHA512:
+                        return @"SHA512";
+        }
+        return nil;
+}
+
 + (CryptoProxy *)cryptoProxyWithAlgorithm:(CryptoAlgorithm)algorithm {
-    CryptoProxy *cryptoProxy = [[CryptoProxy alloc] init];
+    CryptoProxy *cryptoProxy = [self new];
 
     cryptoProxy.algorithm = algorithm;
 
     return cryptoProxy;
+}
+
+- (NSString *)description {
+        return [NSString stringWithFormat:@"%@: {%@}",
+                self.className,
+                [CryptoProxy algorithmToString:_algorithm]];
 }
 
 #pragma mark - Digest

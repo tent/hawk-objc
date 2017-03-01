@@ -17,17 +17,19 @@
 @property (nonatomic, strong) HawkCredentials *credentials;
 @property (nonatomic, strong) NSString *dlg;
 @property (nonatomic, strong) NSString *ext;
+@property (nonatomic, strong) NSString *host;
 @property (nonatomic, strong) NSString *method;
 @property (nonatomic, strong) NSString *nonce;
 @property (nonatomic, strong) NSString *payload;
+@property (nonatomic, strong) NSNumber *port;
+@property (nonatomic, strong) NSString *resourcePath;
 @property (nonatomic, strong) NSDate *timestamp;
-@property (nonatomic, strong) NSURL *url;
 @end
 
 @implementation HawkAuth
 
 - (CryptoProxy *)cryptoProxy {
-        return [CryptoProxy cryptoProxyWithAlgorithm:_algorithm];
+        return [CryptoProxy cryptoProxyWithAlgorithm:self.credentials.algorithm];
 }
 
 - (NSString *)hawkAuthTypeToString:(HawkAuthType)type {
@@ -56,9 +58,9 @@
         [normalizedString appendFormat:@"%.0f\n", [self.timestamp timeIntervalSince1970]];
         [normalizedString appendFormat:@"%@\n", (self.nonce ?: @"")];
         [normalizedString appendFormat:@"%@\n", self.method];
-        [normalizedString appendFormat:@"%@\n", self.url.path];
-        [normalizedString appendFormat:@"%@\n", self.url.host];
-        [normalizedString appendFormat:@"%@\n", self.url.port];
+        [normalizedString appendFormat:@"%@\n", self.resourcePath];
+        [normalizedString appendFormat:@"%@\n", self.host];
+        [normalizedString appendFormat:@"%@\n", self.port];
         [normalizedString appendFormat:@"%@\n", ([self payloadHash] ?: @"")];
         [normalizedString appendFormat:@"%@\n", (self.ext ?: @"")];
         
@@ -373,11 +375,13 @@
 @property (nonatomic, strong) HawkCredentials *credentials;
 @property (nonatomic, strong) NSString *dlg;
 @property (nonatomic, strong) NSString *ext;
+@property (nonatomic, strong) NSString *host;
 @property (nonatomic, strong) NSString *method;
 @property (nonatomic, strong) NSString *nonce;
 @property (nonatomic, strong) NSString *payload;
+@property (nonatomic, strong) NSNumber *port;
+@property (nonatomic, strong) NSString *resourcePath;
 @property (nonatomic, strong) NSDate *timestamp;
-@property (nonatomic, strong) NSURL *url;
 @end
 
 @implementation HawkAuthBuilder
@@ -451,9 +455,28 @@
         return self;
 }
 
-- (instancetype)withURL:(NSURL *)url {
-        self.url = url;
+- (instancetype)withHost:(NSString *)host {
+        self.host = host;
         return self;
+}
+- (instancetype)withPort:(NSNumber *)port {
+        self.port = port;
+        return self;
+}
+
+- (instancetype)withResourcePath:(NSString *)resourcePath {
+        self.resourcePath = resourcePath;
+        return self;
+}
+
+- (instancetype)withURL:(NSURL *)url {
+        NSString *path = [NSString stringWithFormat:@"%@?%@",
+                          url.path,
+                          url.query ?: @""];
+        
+        return [[[self withHost:url.host]
+                 withPort:url.port]
+                withResourcePath:path];
 }
 
 - (instancetype)withURLString:(NSString *)urlString {
@@ -520,11 +543,13 @@
         auth.credentials = self.credentials;
         auth.dlg = self.dlg;
         auth.ext = self.ext;
+        auth.host = self.host;
         auth.method = self.method;
         auth.nonce = self.nonce;
         auth.payload = self.payload;
+        auth.port = self.port;
+        auth.resourcePath = self.resourcePath;
         auth.timestamp = self.timestamp;
-        auth.url = self.url;
         
         return auth;
 }
