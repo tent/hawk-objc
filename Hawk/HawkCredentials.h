@@ -23,6 +23,10 @@
                       key:(NSString *)key
                 algorithm:(CryptoAlgorithm)algorithm;
 
+/* Defaults to sha256 */
++ (instancetype)withKeyId:(NSString *)hawkId
+                      key:(NSString *)key;
+
 /*
  @return A copy of the original credentials with the algorithm replaced
  */

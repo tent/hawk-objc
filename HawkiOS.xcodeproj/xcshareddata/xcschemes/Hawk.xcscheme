@@ -17,7 +17,7 @@
                BlueprintIdentifier = "8857C8DC17B2DDD40056A6F9"
                BuildableName = "Hawk.framework"
                BlueprintName = "Hawk"
-               ReferencedContainer = "container:Hawk.xcodeproj">
+               ReferencedContainer = "container:HawkiOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "8857C8F317B2DDD40056A6F9"
                BuildableName = "HawkTests.xctest"
                BlueprintName = "HawkTests"
-               ReferencedContainer = "container:Hawk.xcodeproj">
+               ReferencedContainer = "container:HawkiOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "8857C8DC17B2DDD40056A6F9"
             BuildableName = "Hawk.framework"
             BlueprintName = "Hawk"
-            ReferencedContainer = "container:Hawk.xcodeproj">
+            ReferencedContainer = "container:HawkiOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -67,7 +67,7 @@
             BlueprintIdentifier = "8857C8DC17B2DDD40056A6F9"
             BuildableName = "Hawk.framework"
             BlueprintName = "Hawk"
-            ReferencedContainer = "container:Hawk.xcodeproj">
+            ReferencedContainer = "container:HawkiOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -85,7 +85,7 @@
             BlueprintIdentifier = "8857C8DC17B2DDD40056A6F9"
             BuildableName = "Hawk.framework"
             BlueprintName = "Hawk"
-            ReferencedContainer = "container:Hawk.xcodeproj">
+            ReferencedContainer = "container:HawkiOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

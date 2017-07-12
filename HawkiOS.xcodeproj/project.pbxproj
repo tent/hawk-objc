@@ -29,12 +29,12 @@
 		885DE67617B411A20066BD9B /* HawkError.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE67417B411A20066BD9B /* HawkError.h */; };
 		885DE67717B411A20066BD9B /* HawkError.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67517B411A20066BD9B /* HawkError.m */; };
 		885DE67817B411A20066BD9B /* HawkError.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67517B411A20066BD9B /* HawkError.m */; };
-		885DE68017B54CCA0066BD9B /* CryptoProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE67E17B54CCA0066BD9B /* CryptoProxy.h */; };
+		885DE68017B54CCA0066BD9B /* CryptoProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE67E17B54CCA0066BD9B /* CryptoProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		885DE68117B54CCA0066BD9B /* CryptoProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67F17B54CCA0066BD9B /* CryptoProxy.m */; };
 		885DE68217B54CCA0066BD9B /* CryptoProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE67F17B54CCA0066BD9B /* CryptoProxy.m */; };
 		885DE68417B558BC0066BD9B /* HawkCryptoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE68317B558BC0066BD9B /* HawkCryptoTests.m */; };
 		885DE68517B558BC0066BD9B /* HawkCryptoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE68317B558BC0066BD9B /* HawkCryptoTests.m */; };
-		885DE69717B570B80066BD9B /* HawkAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE69517B570B80066BD9B /* HawkAuth.h */; };
+		885DE69717B570B80066BD9B /* HawkAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = 885DE69517B570B80066BD9B /* HawkAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		885DE69817B570B80066BD9B /* HawkAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE69617B570B80066BD9B /* HawkAuth.m */; };
 		885DE69917B570B80066BD9B /* HawkAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 885DE69617B570B80066BD9B /* HawkAuth.m */; };
 		DA3DBC631E653CC0009BF14D /* Nonce.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3DBC611E653CC0009BF14D /* Nonce.h */; };
@@ -44,6 +44,7 @@
 		DA3DBC671E653CC0009BF14D /* Nonce.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3DBC621E653CC0009BF14D /* Nonce.m */; };
 		DA3DBC691E654A38009BF14D /* NonceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3DBC681E654A38009BF14D /* NonceTests.m */; };
 		DA3DBC6A1E654A40009BF14D /* NonceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3DBC681E654A38009BF14D /* NonceTests.m */; };
+		DA9669881F0A879B006C8D52 /* Hawk.h in Headers */ = {isa = PBXBuildFile; fileRef = DA9669871F0A879B006C8D52 /* Hawk.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		DA3DBC611E653CC0009BF14D /* Nonce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nonce.h; sourceTree = "<group>"; };
 		DA3DBC621E653CC0009BF14D /* Nonce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Nonce.m; sourceTree = "<group>"; };
 		DA3DBC681E654A38009BF14D /* NonceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonceTests.m; sourceTree = "<group>"; };
+		DA9669871F0A879B006C8D52 /* Hawk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hawk.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 		8857C8E617B2DDD40056A6F9 /* Hawk */ = {
 			isa = PBXGroup;
 			children = (
+				DA9669871F0A879B006C8D52 /* Hawk.h */,
 				885DE69517B570B80066BD9B /* HawkAuth.h */,
 				885DE69617B570B80066BD9B /* HawkAuth.m */,
 				8857C91817B2DE9F0056A6F9 /* HawkCredentials.h */,
@@ -284,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA3DBC631E653CC0009BF14D /* Nonce.h in Headers */,
+				DA9669881F0A879B006C8D52 /* Hawk.h in Headers */,
 				885DE68017B54CCA0066BD9B /* CryptoProxy.h in Headers */,
 				885DE69717B570B80066BD9B /* HawkAuth.h in Headers */,
 				8857C91E17B2DE9F0056A6F9 /* HawkCredentials.h in Headers */,
@@ -375,12 +379,15 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Tent;
 				TargetAttributes = {
+					8857C8DC17B2DDD40056A6F9 = {
+						LastSwiftMigration = 0830;
+					};
 					8857C93117B2DF700056A6F9 = {
 						TestTargetID = 8857C8DC17B2DDD40056A6F9;
 					};
 				};
 			};
-			buildConfigurationList = 8857C8D717B2DDD40056A6F9 /* Build configuration list for PBXProject "Hawk" */;
+			buildConfigurationList = 8857C8D717B2DDD40056A6F9 /* Build configuration list for PBXProject "HawkiOS" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -603,15 +610,24 @@
 		8857C90617B2DDD40056A6F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Hawk/Hawk-Prefix.pch";
 				INFOPLIST_FILE = "Hawk/Hawk-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = Hawk/Hawk.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.Tent.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
@@ -623,15 +639,23 @@
 		8857C90717B2DDD40056A6F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Hawk/Hawk-Prefix.pch";
 				INFOPLIST_FILE = "Hawk/Hawk-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = Hawk/Hawk.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.Tent.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
@@ -779,7 +803,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8857C8D717B2DDD40056A6F9 /* Build configuration list for PBXProject "Hawk" */ = {
+		8857C8D717B2DDD40056A6F9 /* Build configuration list for PBXProject "HawkiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8857C90317B2DDD40056A6F9 /* Debug */,

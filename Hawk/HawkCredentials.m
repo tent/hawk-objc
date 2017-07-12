@@ -30,6 +30,13 @@
                                  algorithm:algorithm];
 }
 
++ (instancetype)withKeyId:(NSString *)hawkId
+                      key:(NSString *)key {
+    return [self withKeyId:hawkId
+                       key:key
+                 algorithm:kCryptoAlgorithmSHA256];
+}
+
 - (instancetype)copyWithAlgorithm:(CryptoAlgorithm)algorithm {
         return [HawkCredentials withKeyId:_keyId
                                       key:_key

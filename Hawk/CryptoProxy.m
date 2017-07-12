@@ -42,7 +42,7 @@
 
 - (NSString *)description {
         return [NSString stringWithFormat:@"%@: {%@}",
-                self.className,
+                NSStringFromClass(self.class),
                 [CryptoProxy algorithmToString:_algorithm]];
 }
 

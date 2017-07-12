@@ -470,8 +470,9 @@
 }
 
 - (instancetype)withURL:(NSURL *)url {
-        NSString *path = [NSString stringWithFormat:@"%@?%@",
+        NSString *path = [NSString stringWithFormat:@"%@%@%@",
                           url.path,
+                          url.query ? @"?" : @"",
                           url.query ?: @""];
         
         return [[[self withHost:url.host]

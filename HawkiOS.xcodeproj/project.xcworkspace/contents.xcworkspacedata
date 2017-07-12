@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Hawk.xcodeproj">
+      location = "self:/Users/chrisfuentes/github.com/polis-hawk-objc/HawkiOS.xcodeproj">
    </FileRef>
 </Workspace>
