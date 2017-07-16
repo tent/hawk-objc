@@ -112,6 +112,7 @@
 		DA3DBC621E653CC0009BF14D /* Nonce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Nonce.m; sourceTree = "<group>"; };
 		DA3DBC681E654A38009BF14D /* NonceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonceTests.m; sourceTree = "<group>"; };
 		DA9669871F0A879B006C8D52 /* Hawk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hawk.h; sourceTree = "<group>"; };
+		DAA635FF1F18051900E0F496 /* Hawk.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = Hawk.modulemap; path = Hawk/Hawk.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +156,7 @@
 		8857C8D317B2DDD40056A6F9 = {
 			isa = PBXGroup;
 			children = (
+				DAA635FF1F18051900E0F496 /* Hawk.modulemap */,
 				8857C8E617B2DDD40056A6F9 /* Hawk */,
 				8857C8FB17B2DDD40056A6F9 /* HawkTests */,
 				8857C92717B2DF700056A6F9 /* libhawk */,

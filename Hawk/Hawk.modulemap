@@ -1,0 +1,3 @@
+module Hawk {
+    umbrella header "Hawk.h"
+}

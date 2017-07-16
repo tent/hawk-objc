@@ -50,4 +50,20 @@
                 [CryptoProxy algorithmToString:_algorithm]];
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.key forKey:@"key"];
+    [aCoder encodeObject:self.keyId forKey:@"keyId"];
+    [aCoder encodeObject:@(self.algorithm) forKey:@"algorithm"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    NSString *key = [aDecoder decodeObjectForKey:@"key"];
+    NSString *keyId = [aDecoder decodeObjectForKey:@"keyId"];
+    CryptoAlgorithm algorithm = [[aDecoder decodeObjectForKey:@"algorithm"] unsignedIntegerValue];
+    
+    return [self initWithKeyId:keyId
+                           key:key
+                     algorithm:algorithm];
+}
+
 @end

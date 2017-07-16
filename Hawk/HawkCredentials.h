@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "CryptoProxy.h"
 
-@interface HawkCredentials : NSObject
+@interface HawkCredentials : NSObject<NSCoding>
 
 /*
  http://stackoverflow.com/questions/9859719/objective-c-declared-property-attributes-nonatomic-copy-strong-weak

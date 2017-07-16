@@ -177,6 +177,7 @@ typedef NS_ENUM(int, ContentType) {
 - (instancetype)withMethod:(NSString *)method;
 - (instancetype)withNonce:(NSString *)nonce;
 - (instancetype)withPayload:(NSString *)payload;
+- (instancetype)withPayloadData:(NSData *)data;
 //TODO: withPayloadJSON:
 - (instancetype)withTimestamp:(NSDate *)timestamp;
 - (instancetype)withURL:(NSURL *)url;
