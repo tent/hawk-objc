@@ -11,9 +11,8 @@
 #import "NSString+Base64.h"
 
 @interface HawkTests : XCTestCase
-{
-    HawkAuth *auth;
-}
+@property (nonatomic, strong) HawkAuthBuilder *builder;
+@property (nonatomic, strong) HawkAuth *auth;
 @end
 
 @implementation HawkTests
@@ -22,41 +21,59 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-
-    auth = [[HawkAuth alloc] init];
-    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"exqbZWtykFZIh2D7cXi9dA" withKey:@"HX9QcbD-r3ItFEnRcAuOSg" withAlgorithm:CryptoAlgorithmSHA256];
-    auth.contentType = @"application/vnd.tent.post.v0+json";
-    auth.method = @"POST";
-    auth.requestUri = @"/posts";
-    auth.host = @"example.com";
-    auth.port = 443;
-    auth.payload = @"{\"type\":\"https://tent.io/types/status/v0#\"}";
+        
+        HawkCredentials *creds = [HawkCredentials withKeyId:@"exqbZWtykFZIh2D7cXi9dA"
+                                                        key:@"HX9QcbD-r3ItFEnRcAuOSg"
+                                                  algorithm:kCryptoAlgorithmSHA256];
+        self.builder = [[[[[[[HawkAuthBuilder withCredentials:creds]
+                             withContentType:@"application/vnd.tent.post.v0+json"]
+                            usingPOST]
+                           withHost:@"example.com"]
+                          withPort:@(443)]
+                         withResourcePath:@"/posts"]
+                        withPayload:@"{\"type\":\"https://tent.io/types/status/v0#\"}"];
+        
+        self.auth = [self.builder build];
 }
 
-- (void)tearDown
-{
+- (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testPayloadHash
-{
+- (void)testEqualUrlsDifferentFormats {
+        [[[self.builder withHost:@"example.com"]
+          withPort:@(443)]
+         withResourcePath:@"/posts?foo=bar&bar=dog"];
+        NSString *hmac1 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        [self.builder withURLString:@"//example.com:443/posts?foo=bar&bar=dog"];
+        NSString *hmac2 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        [self.builder withURL:[NSURL URLWithString:@"//example.com:443/posts?foo=bar&bar=dog"]];
+        NSString *hmac3 = [self.builder.build hmacWithType:kHawkAuthTypeHeader];
+        
+        XCTAssertEqualObjects(hmac1, hmac2);
+        XCTAssertEqualObjects(hmac2, hmac3);
+}
+
+- (void)testPayloadHash {
     NSString *expectedHash = @"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=";
 
-    NSString *payloadHash = [auth payloadHash];
+    NSString *payloadHash = [self.auth payloadHash];
 
     XCTAssertEqualObjects(payloadHash, expectedHash);
 }
 
-- (void)testMac
-{
+- (void)testMac {
     NSString *expectedMac = @"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=";
 
-    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+        self.auth = [[[[self.builder withApp:@"wn6yzHGe5TLaT-fvOPbAyQ"]
+                       withNonce:@"3yuYCD4Z"]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    NSString *mac = [auth hmacWithType:HawkAuthTypeHeader];
+    NSString *mac = [self.auth hmacWithType:kHawkAuthTypeHeader];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -65,12 +82,13 @@
 {
     NSString *expectedMac = @"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=";
 
-    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    auth.payload = nil;
+        self.auth = [[[[[self.builder withApp:@"wn6yzHGe5TLaT-fvOPbAyQ"]
+                        withNonce:@"3yuYCD4Z"]
+                       withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                      withPayload:nil]
+                     build];
 
-    NSString *mac = [auth hmacWithType:HawkAuthTypeResponse];
+    NSString *mac = [self.auth hmacWithType:kHawkAuthTypeResponse];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
@@ -79,55 +97,57 @@
 {
     NSString *expectedMac = @"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=";
 
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+        self.auth = [[[self.builder withNonce:@"3yuYCD4Z"]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    NSString *mac = [auth hmacWithType:HawkAuthTypeResponse];
+    NSString *mac = [self.auth hmacWithType:kHawkAuthTypeResponse];
 
     XCTAssertEqualObjects(mac, expectedMac);
 }
 
-- (void)testBewit
-{
+- (void)testBewit {
     // First Test Vector (doesn't ensure urlsafe base64 fn used)
     NSString *expectedBewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
+        
+        self.auth = [[[[self.builder withPayload:nil]
+                       usingGET]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    auth.payload = nil;
-    auth.method = @"GET";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-
-    NSString *bewit = [auth bewit];
+    NSString *bewit = [self.auth bewit];
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 
     // Second Test Vector (ensures far future timestamps work, "/" is replaced with "_")
     expectedBewit = @"MTIzNDU2XDQ1MTkzMTE0NThcRDk0L0daVEwzbFpvSmx6cnBLZUtZWkswd3NzS21FalNrSStFZm51dHh1QT1c76u_77yw44Sy";
 
-    auth = [[HawkAuth alloc] init];
-    auth.credentials = [[HawkCredentials alloc] initWithHawkId:@"123456" withKey:@"2983d45yun89q" withAlgorithm:CryptoAlgorithmSHA256];
+    HawkCredentials *credentials = [HawkCredentials withKeyId:@"123456"
+                                                          key:@"2983d45yun89q"
+                                                    algorithm:kCryptoAlgorithmSHA256];
+        
 
-    auth.method = @"GET";
-    auth.requestUri = @"/resource/4?a=1&b=2";
-    auth.port = 80;
-    auth.host = @"example.com";
-    auth.ext = [@"76u/77yw44Sy\n" base64DecodedString];
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:4519311458];
+        self.auth = [[[[[[self.builder withCredentials:credentials]
+                         usingGET]
+                        withURLString:@"//example.com:80/resource/4?a=1&b=2"]
+                       withExt:[@"76u/77yw44Sy\n" base64DecodedString]]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:4519311458]]
+                     build];
 
-    bewit = [auth bewit];
+    bewit = [self.auth bewit];
 
     XCTAssertEqualObjects(bewit, expectedBewit);
 }
 
-- (void) testBewitValidation
-{
+- (void) testBewitValidation {
     NSString *bewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
-    auth.payload = nil;
-    auth.method = @"GET";
+        self.auth = [[[self.builder withPayload:nil] usingGET] build];
 
-    HawkError *error = [auth validateBewit:bewit credentialsLookup:^HawkCredentials *(NSString * hawkId) {
-        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
-            return auth.credentials;
+    HawkError *error = [self.auth validateBewit:bewit
+                              credentialsLookup:^HawkCredentials *(NSString *keyId) {
+        if ([keyId isEqualToString:self.auth.credentials.keyId]) {
+            return self.auth.credentials;
         } else {
             return nil;
         }
@@ -136,16 +156,15 @@
     XCTAssert(!error);
 }
 
-- (void)testExpiredBewitValidation
-{
+- (void)testExpiredBewitValidation {
     NSString *bewit = @"ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA";
 
-    auth.payload = nil;
-    auth.method = @"GET";
+    self.auth = [[[self.builder withPayload:nil] usingGET] build];
 
-    HawkError *error = [auth validateBewit:bewit credentialsLookup:^HawkCredentials *(NSString * hawkId) {
-        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
-            return auth.credentials;
+    HawkError *error = [self.auth validateBewit:bewit
+                              credentialsLookup:^HawkCredentials *(NSString *keyId) {
+        if ([keyId isEqualToString:self.auth.credentials.keyId]) {
+            return self.auth.credentials;
         } else {
             return nil;
         }
@@ -154,26 +173,26 @@
     XCTAssertNotNil(error);
 }
 
-- (void)testAuthorizationHeader
-{
+- (void)testAuthorizationHeader {
     NSString *expectedHeader = @"Authorization: Hawk id=\"exqbZWtykFZIh2D7cXi9dA\", mac=\"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=\", ts=\"1368996800\", nonce=\"3yuYCD4Z\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\", app=\"wn6yzHGe5TLaT-fvOPbAyQ\"";
 
-    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+        self.auth = [[[[self.builder withApp:@"wn6yzHGe5TLaT-fvOPbAyQ"]
+                       withNonce: @"3yuYCD4Z"]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    NSString *header = [auth requestHeader];
+    NSString *header = [self.auth requestHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
 
-- (void)testAuthorizationHeaderValidation
-{
+- (void)testAuthorizationHeaderValidation {
     NSString *header = @"Authorization: Hawk id=\"exqbZWtykFZIh2D7cXi9dA\", mac=\"2sttHCQJG9ejj1x7eCi35FP23Miu9VtlaUgwk68DTpM=\", ts=\"1368996800\", nonce=\"3yuYCD4Z\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\", app=\"wn6yzHGe5TLaT-fvOPbAyQ\"";
 
-    HawkError *error = [auth validateRequestHeader:header credentialsLookup:^HawkCredentials *(NSString *hawkId) {
-        if ([hawkId isEqualToString:auth.credentials.hawkId]) {
-            return auth.credentials;
+    HawkError *error = [self.auth validateRequestHeader:header
+                                      credentialsLookup:^HawkCredentials *(NSString *keyId) {
+        if ([keyId isEqualToString:self.auth.credentials.keyId]) {
+            return self.auth.credentials;
         }
 
         return nil;
@@ -182,82 +201,77 @@
     XCTAssert(!error);
 }
 
-- (void)testServerAuthorizationHeader
-{
+- (void)testServerAuthorizationHeader {
     NSString *expectedHeader = @"Server-Authorization: Hawk mac=\"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=\"";
+        
+        self.auth = [[[[[self.builder withApp:@"wn6yzHGe5TLaT-fvOPbAyQ"]
+                        withNonce:@"3yuYCD4Z"]
+                       withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                      withPayload:nil]
+                     build];
 
-    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    auth.payload = nil;
-
-    NSString *header = [auth responseHeader];
+    NSString *header = [self.auth responseHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
 
-- (void)testServerAuthorizationHeaderWithPayload
-{
+- (void)testServerAuthorizationHeaderWithPayload {
     NSString *expectedHeader = @"Server-Authorization: Hawk mac=\"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\"";
+        
+        self.auth = [[[self.builder withNonce:@"3yuYCD4Z"]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-
-    NSString *header = [auth responseHeader];
+    NSString *header = [self.auth responseHeader];
 
     XCTAssertEqualObjects(header, expectedHeader);
 }
 
-- (void)testServerAuthorizationHeaderValidation
-{
+- (void)testServerAuthorizationHeaderValidation {
     NSString *header = @"Server-Authorization: Hawk mac=\"lTG3kTBr33Y97Q4KQSSamu9WY/mOUKnZzq/ho9x+yxw=\"";
+        
+        self.auth = [[[[[self.builder withApp:@"wn6yzHGe5TLaT-fvOPbAyQ"]
+                        withNonce:@"3yuYCD4Z"]
+                       withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                      withPayload:nil]
+                     build];
 
-    auth.app = @"wn6yzHGe5TLaT-fvOPbAyQ";
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-    auth.payload = nil;
-
-    HawkError *error = [auth validateResponseHeader:header];
+    HawkError *error = [self.auth validateResponseHeader:header];
 
     XCTAssert(!error);
 }
 
-- (void)testServerAuthorizationHeaderWithPayloadValidation
-{
+- (void)testServerAuthorizationHeaderWithPayloadValidation {
     NSString *header = @"Server-Authorization: Hawk mac=\"LvxASIZ2gop5cwE2mNervvz6WXkPmVslwm11MDgEZ5E=\", hash=\"neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=\"";
+        
+        self.auth = [[[self.builder withNonce:@"3yuYCD4Z"]
+                      withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
 
-    auth.nonce = @"3yuYCD4Z";
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-
-    HawkError *error = [auth validateResponseHeader:header];
+    HawkError *error = [self.auth validateResponseHeader:header];
 
     XCTAssert(!error);
 }
 
-- (void)testTimestampSkew
-{
+- (void)testTimestampSkew {
     NSString *expectedTsm = @"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=";
+        
+        self.auth  = [[self.builder withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                      build];
 
-    HawkCredentials *credentials = auth.credentials;
-    auth = [[HawkAuth alloc] init];
-    auth.credentials = credentials;
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
-
-    NSString *tsm = [auth timestampSkewHmac];
+    NSString *tsm = [self.auth timestampSkewHmac];
 
     XCTAssertEqualObjects(expectedTsm, tsm);
 }
 
-- (void)testTimestampSkewHeader
-{
+- (void)testTimestampSkewHeader {
     NSString *expectedHeader = @"WWW-Authenticate: Hawk ts=\"1368996800\", tsm=\"HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=\", error=\"timestamp skew too high\"";
 
-    HawkCredentials *credentials = auth.credentials;
-    auth = [[HawkAuth alloc] init];
-    auth.credentials = credentials;
-    auth.timestamp = [NSDate dateWithTimeIntervalSince1970:1368996800];
+        self.auth = [[self.builder withTimestamp:[NSDate dateWithTimeIntervalSince1970:1368996800]]
+                     build];
+    
 
-    NSString *header = [auth timestampSkewHeader];
+    NSString *header = [self.auth timestampSkewHeader];
 
     XCTAssertEqualObjects(expectedHeader, header);
 }

@@ -11,15 +11,59 @@
 
 @implementation HawkCredentials
 
-- (id)initWithHawkId:(NSString *)hawkId withKey:(NSString *)key withAlgorithm:(CryptoAlgorithm)algorithm
-{
-    self = [super init];
+- (id)initWithKeyId:(NSString *)keyId
+                 key:(NSString *)key
+           algorithm:(CryptoAlgorithm)algorithm {
+        if (self = [super init]) {
+                _algorithm = algorithm;
+                _keyId = keyId;
+                _key = key;
+        }
+        return self;
+}
 
-    self.hawkId = hawkId;
-    self.key = key;
-    self.algorithm = algorithm;
++ (instancetype)withKeyId:(NSString *)keyId
+                   key:(NSString *)key
+                 algorithm:(CryptoAlgorithm)algorithm {
+        return [[self alloc] initWithKeyId:keyId
+                                       key:key
+                                 algorithm:algorithm];
+}
 
-    return self;
++ (instancetype)withKeyId:(NSString *)hawkId
+                      key:(NSString *)key {
+    return [self withKeyId:hawkId
+                       key:key
+                 algorithm:kCryptoAlgorithmSHA256];
+}
+
+- (instancetype)copyWithAlgorithm:(CryptoAlgorithm)algorithm {
+        return [HawkCredentials withKeyId:_keyId
+                                      key:_key
+                                algorithm:algorithm];
+}
+
+- (NSString *)description {
+        return [NSString stringWithFormat:@"%@:%@ {%@}",
+                _keyId,
+                _key,
+                [CryptoProxy algorithmToString:_algorithm]];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.key forKey:@"key"];
+    [aCoder encodeObject:self.keyId forKey:@"keyId"];
+    [aCoder encodeObject:@(self.algorithm) forKey:@"algorithm"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    NSString *key = [aDecoder decodeObjectForKey:@"key"];
+    NSString *keyId = [aDecoder decodeObjectForKey:@"keyId"];
+    CryptoAlgorithm algorithm = [[aDecoder decodeObjectForKey:@"algorithm"] unsignedIntegerValue];
+    
+    return [self initWithKeyId:keyId
+                           key:key
+                     algorithm:algorithm];
 }
 
 @end
